@@ -16,6 +16,7 @@ interface ScenarioBrowserProps {
 export function ScenarioBrowser({ open, onClose }: ScenarioBrowserProps) {
   const [importText, setImportText] = useState('');
   const [query, setQuery] = useState('');
+  const [category, setCategory] = useState<string>('all');
   const [errors, setErrors] = useState<string[]>([]);
   const loadScenarioById = useAetherStore((state) => state.loadScenarioById);
   const saved = useAetherStore((state) => state.savedConfigurations);
@@ -27,10 +28,13 @@ export function ScenarioBrowser({ open, onClose }: ScenarioBrowserProps) {
   const applyScenario = useAetherStore((state) => state.applyScenario);
   const notify = useAetherStore((state) => state.notify);
 
+  const categories = [...new Set(SCENARIOS.map((scenario) => scenario.category))].sort();
   const needle = query.trim().toLowerCase();
-  const visibleScenarios = needle
-    ? SCENARIOS.filter((scenario) => `${scenario.name} ${scenario.description} ${scenario.category}`.toLowerCase().includes(needle))
-    : SCENARIOS;
+  const visibleScenarios = SCENARIOS.filter((scenario) => {
+    const matchesCategory = category === 'all' || scenario.category === category;
+    const matchesQuery = !needle || `${scenario.name} ${scenario.description} ${scenario.category}`.toLowerCase().includes(needle);
+    return matchesCategory && matchesQuery;
+  });
 
   const download = (id: string) => {
     const scenario = SCENARIOS.find((item) => item.id === id);
@@ -61,15 +65,24 @@ export function ScenarioBrowser({ open, onClose }: ScenarioBrowserProps) {
   return (
     <Dialog open={open} onClose={onClose} title="Scenarios" subtitle="Deterministic starting conditions and saved configurations" width="max-w-3xl">
       <div className="space-y-5">
-        <section>
+        <section className="flex gap-2">
           <input
             type="search"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             aria-label="Search scenarios"
             placeholder="Search scenarios by name, description or category…"
-            className="aether-mono mb-2 w-full rounded border border-[var(--aether-border)] bg-[var(--aether-bg-raised)] px-2 py-1.5 text-[10px] outline-none"
+            className="aether-mono w-full rounded border border-[var(--aether-border)] bg-[var(--aether-bg-raised)] px-2 py-1.5 text-[10px] outline-none"
           />
+          <select
+            value={category}
+            onChange={(event) => setCategory(event.target.value)}
+            aria-label="Filter scenarios by category"
+            className="aether-mono w-36 rounded border border-[var(--aether-border)] bg-[var(--aether-bg-raised)] px-2 py-1.5 text-[10px] outline-none"
+          >
+            <option value="all">All categories</option>
+            {categories.map((item) => <option key={item} value={item}>{item}</option>)}
+          </select>
         </section>
 
         <section className="grid gap-2 sm:grid-cols-2">
@@ -88,6 +101,9 @@ export function ScenarioBrowser({ open, onClose }: ScenarioBrowserProps) {
               </div>
             </div>
           ))}
+          {visibleScenarios.length === 0 ? (
+            <p className="text-[11px] text-[var(--aether-text-dim)]">No scenarios match the current filters.</p>
+          ) : null}
         </section>
 
         <section className="border-t border-[var(--aether-border)] pt-4">
