@@ -6,6 +6,7 @@ import { Slider } from '@/components/ui/Slider';
 import { Switch } from '@/components/ui/Switch';
 import { useAetherStore, resetPersistedSettings } from '@/state/store';
 import { createDefaultSettings } from '@/data/defaults';
+import { applyQualityPreset } from '@/renderer/quality';
 import type { RenderingConfig } from '@/types/config';
 import type { QualityMode } from '@/types/simulation';
 
@@ -72,7 +73,7 @@ export function SettingsDialog() {
               { value: 'balanced', label: 'Balanced' },
               { value: 'high', label: 'High' },
             ]}
-            onChange={(quality) => updateRendering({ quality })}
+            onChange={(quality) => updateSettings({ rendering: applyQualityPreset(settings.rendering, quality) })}
           />
           <Slider
             label="Pixel ratio cap"
