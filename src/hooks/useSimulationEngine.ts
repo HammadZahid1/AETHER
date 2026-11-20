@@ -1,5 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import { simulationEngine } from '@/engine/engine';
+import { FrameRateTracker } from '@/engine/performance';
 import type { PrecipitationSimulation } from '@/simulations/precipitation/PrecipitationSimulation';
 import {
   registerSimulationModules,
@@ -57,12 +58,15 @@ export function useSimulationEngine(): SimulationControls {
     let previous = performance.now();
     let handle = 0;
     let lastErrorCount = 0;
+    const fpsTracker = new FrameRateTracker();
 
     const tick = (now: number) => {
       const delta = Math.min(0.1, Math.max(0, (now - previous) / 1000));
       previous = now;
       const context = simulationEngine.update(delta);
       frame += 1;
+      const fps = fpsTracker.sample(now);
+      if (frame % 12 === 0) useAetherStore.getState().setFps(fps);
       const errors = simulationEngine.getErrors();
       if (errors.length < lastErrorCount) lastErrorCount = 0;
       if (errors.length > lastErrorCount) {
