@@ -33,6 +33,12 @@ describe('CommandPalette', () => {
     expect(controls.play).toHaveBeenCalledOnce();
   });
 
+  it('toggles the diagnostics overlay', () => {
+    render(<CommandPalette controls={controls} onResetCamera={vi.fn()} />);
+    fireEvent.click(screen.getByRole('option', { name: /Toggle engine diagnostics/ }));
+    expect(useAetherStore.getState().diagnosticsOpen).toBe(true);
+  });
+
   it('loads a saved camera view', () => {
     useAetherStore.setState({
       savedViews: [{
