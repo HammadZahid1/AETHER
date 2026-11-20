@@ -33,6 +33,7 @@ export interface AetherState {
   timeline: number;
   elapsed: number;
   frame: number;
+  fps: number;
   selectedCoordinate: GeoCoordinates | null;
   camera: CameraState;
   activeScenarioId: string | null;
@@ -57,6 +58,7 @@ export interface AetherState {
   setSpeed: (speed: number) => void;
   setDirection: (direction: PlaybackDirection) => void;
   setClock: (elapsed: number, timeline: number, frame: number) => void;
+  setFps: (fps: number) => void;
   seek: (timeline: number) => void;
   setSelectedCoordinate: (coordinate: GeoCoordinates | null) => void;
   setCamera: (patch: Partial<CameraState>) => void;
@@ -99,6 +101,7 @@ export const useAetherStore = create<AetherState>((set, get) => ({
   timeline: 0,
   elapsed: 0,
   frame: 0,
+  fps: 0,
   selectedCoordinate: { latitude: 18, longitude: -55 },
   camera: { target: { latitude: 12, longitude: -25 }, distance: 2.8, preset: 'Global View', autoRotate: initialSettings.autoRotate },
   activeScenarioId: 'global-wind',
@@ -140,6 +143,7 @@ export const useAetherStore = create<AetherState>((set, get) => ({
   setSpeed: (speed) => set({ speed: Math.min(Math.max(speed, 0), 16) }),
   setDirection: (direction) => set({ direction }),
   setClock: (elapsed, timeline, frame) => set({ elapsed, timeline, frame }),
+  setFps: (fps) => set({ fps: Math.max(0, Number.isFinite(fps) ? fps : 0) }),
   seek: (timeline) => set({ timeline: Math.min(Math.max(timeline, 0), 0.999999) }),
   setSelectedCoordinate: (selectedCoordinate) => set({ selectedCoordinate }),
 
