@@ -20,7 +20,9 @@ export function validateScenario(value: unknown): ValidationResult {
   if (!scenario.module || !MODULE_IDS.includes(scenario.module)) errors.push('Invalid module');
   if (!Array.isArray(scenario.layers) || !scenario.layers.every((layer) => LAYER_IDS.includes(layer))) errors.push('Invalid layers');
   if (!scenario.camera || !Number.isFinite(scenario.camera.distance)) errors.push('Invalid camera');
+  if (!Number.isFinite(scenario.camera?.target?.latitude) || !Number.isFinite(scenario.camera?.target?.longitude)) errors.push('Invalid camera target');
   if (!Number.isFinite(scenario.speed) || (scenario.speed ?? 0) < 0) errors.push('Invalid speed');
+  if (scenario.time !== undefined && !Number.isFinite(scenario.time)) errors.push('Invalid time');
   return { valid: errors.length === 0, errors };
 }
 
@@ -61,6 +63,29 @@ export function exportScenario(scenario: Scenario, name?: string): string {
   return JSON.stringify(saved, null, 2);
 }
 
+/** Clamp imported values into supported ranges and fill missing defaults. */
+export function sanitizeScenario(saved: SavedConfiguration): SavedConfiguration {
+  const scenario = saved.scenario;
+  const latitude = Math.min(Math.max(scenario.camera.target.latitude, -90), 90);
+  const longitude = ((((scenario.camera.target.longitude + 180) % 360) + 360) % 360) - 180;
+  const clean: Scenario = {
+    ...scenario,
+    name: String(scenario.name).trim().slice(0, 80),
+    description: String(scenario.description ?? '').slice(0, 500),
+    layers: LAYER_IDS.filter((layer) => scenario.layers.includes(layer)),
+    camera: {
+      ...scenario.camera,
+      name: String(scenario.camera.name ?? 'Imported view').slice(0, 80),
+      target: { latitude, longitude },
+      distance: Math.min(Math.max(scenario.camera.distance, 0.5), 20),
+    },
+    time: Math.max(0, scenario.time ?? 0),
+    speed: Math.min(Math.max(scenario.speed, 0), 16),
+    configurations: mergeConfigurations(scenario),
+  };
+  return { ...saved, name: String(saved.name).trim().slice(0, 80) || clean.name, scenario: clean };
+}
+
 /** Parse and validate an exported configuration. */
 export function importScenario(json: string): { saved?: SavedConfiguration; errors: string[] } {
   try {
@@ -68,7 +93,7 @@ export function importScenario(json: string): { saved?: SavedConfiguration; erro
     const result = validateScenario(parsed.scenario);
     if (!result.valid) return { errors: result.errors };
     if (typeof parsed.name !== 'string') return { errors: ['Missing saved configuration name'] };
-    return { saved: parsed, errors: [] };
+    return { saved: sanitizeScenario(parsed), errors: [] };
   } catch (error) {
     return { errors: [error instanceof Error ? error.message : 'Invalid JSON'] };
   }
