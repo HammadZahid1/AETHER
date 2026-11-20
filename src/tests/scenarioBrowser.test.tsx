@@ -11,6 +11,13 @@ describe('ScenarioBrowser', () => {
     expect(onClose).toHaveBeenCalled();
   });
 
+  it('filters scenarios by description text', () => {
+    render(<ScenarioBrowser open onClose={vi.fn()} />);
+    fireEvent.change(screen.getByLabelText('Search scenarios'), { target: { value: 'cyclone' } });
+    expect(screen.getByText('Storm Simulation')).toBeTruthy();
+    expect(screen.queryByText('Global Wind Circulation')).toBeNull();
+  });
+
   it('shows validation errors for invalid imported JSON', () => {
     render(<ScenarioBrowser open onClose={vi.fn()} />);
     fireEvent.change(screen.getByLabelText('Scenario JSON'), { target: { value: '{bad json' } });
