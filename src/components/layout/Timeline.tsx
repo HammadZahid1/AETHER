@@ -64,6 +64,21 @@ export function Timeline({ onPlay, onPause, onStop, onStep }: TimelineProps) {
 
       <div className="hidden h-7 w-px bg-[var(--aether-border)] lg:block" />
 
+      <div className="hidden shrink-0 items-center gap-2 md:flex">
+        <select
+          aria-label="Jump to time"
+          value=""
+          onChange={(event) => seek(Number(event.target.value))}
+          className="aether-mono h-6 rounded-[3px] border border-[var(--aether-border)] bg-[var(--aether-bg-raised)] px-1.5 text-[10px] outline-none"
+        >
+          <option value="" disabled>Jump to…</option>
+          <option value={0}>00:00 UTC</option>
+          <option value={0.25}>06:00 UTC</option>
+          <option value={0.5}>12:00 UTC</option>
+          <option value={0.75}>18:00 UTC</option>
+        </select>
+      </div>
+
       <div className="hidden shrink-0 items-center gap-2 lg:flex">
         <span className="aether-label">Rate</span>
         <select
