@@ -25,6 +25,11 @@ describe('TopBar saved views', () => {
     expect(useAetherStore.getState().camera.preset).toBe('North Atlantic');
   });
 
+  it('labels the workspace as simulated', () => {
+    render(<TopBar onToggleFullscreen={() => undefined} isFullscreen={false} />);
+    expect(screen.getByText('SIMULATED')).toBeTruthy();
+  });
+
   it('opens the data provenance dialog', () => {
     render(<TopBar onToggleFullscreen={() => undefined} isFullscreen={false} />);
     fireEvent.click(screen.getByLabelText('Open data provenance'));
