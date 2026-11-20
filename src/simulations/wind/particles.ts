@@ -71,9 +71,7 @@ export class WindParticles {
       lifetime: this.config.lifetime,
     });
     if (ageOffset > 0) {
-      const last = this.system.capacity - 1;
       const index = this.findLastSpawned();
-      void last;
       this.system.buffers.age[index] = Math.min(ageOffset, this.config.lifetime * 0.95);
     }
   }
