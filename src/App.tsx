@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { CommandPalette } from '@/components/overlays/CommandPalette';
+import { DataProvenanceDialog } from '@/components/overlays/DataProvenanceDialog';
 import { HelpDialog } from '@/components/overlays/HelpDialog';
 import { InspectionHud } from '@/components/overlays/InspectionHud';
 import { LayersPanel } from '@/components/overlays/LayersPanel';
@@ -80,6 +81,7 @@ export function App() {
       <CommandPalette controls={controls} onResetCamera={resetCamera} />
       <SettingsDialog />
       <HelpDialog />
+      <DataProvenanceDialog />
       <LayersPanel />
       <ScenarioBrowser open={scenarioOpen} onClose={() => setScenarioOpen(false)} />
       <Notifications />

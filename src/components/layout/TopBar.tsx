@@ -26,6 +26,7 @@ export function TopBar({ onToggleFullscreen, isFullscreen }: TopBarProps) {
   const setSpeed = useAetherStore((state) => state.setSpeed);
   const setSettingsOpen = useAetherStore((state) => state.setSettingsOpen);
   const setHelpOpen = useAetherStore((state) => state.setHelpOpen);
+  const setProvenanceOpen = useAetherStore((state) => state.setProvenanceOpen);
   const setCommandPaletteOpen = useAetherStore((state) => state.setCommandPaletteOpen);
   const setCamera = useAetherStore((state) => state.setCamera);
   const saveCurrentView = useAetherStore((state) => state.saveCurrentView);
@@ -142,6 +143,7 @@ export function TopBar({ onToggleFullscreen, isFullscreen }: TopBarProps) {
         <IconButton icon="search" label="Open command palette" onClick={() => setCommandPaletteOpen(true)} />
         <IconButton icon="fullscreen" label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'} active={isFullscreen} onClick={onToggleFullscreen} className="hidden sm:inline-flex" />
         <IconButton icon="settings" label="Open settings" onClick={() => setSettingsOpen(true)} />
+        <IconButton icon="info" label="Open data provenance" onClick={() => setProvenanceOpen(true)} className="hidden sm:inline-flex" />
         <IconButton icon="help" label="Open help" onClick={() => setHelpOpen(true)} className="hidden sm:inline-flex" />
       </div>
     </header>
