@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Icon } from '@/components/ui/Icon';
 import { IconButton } from '@/components/ui/Button';
 import { Tooltip } from '@/components/ui/Tooltip';
@@ -16,6 +17,15 @@ export function LeftNav({ mobileOpen, onMobileClose }: LeftNavProps) {
   const setModule = useAetherStore((state) => state.setModule);
   const collapsed = useAetherStore((state) => state.settings.sidebarCollapsed);
   const updateSettings = useAetherStore((state) => state.updateSettings);
+  const [query, setQuery] = useState('');
+
+  const needle = query.trim().toLowerCase();
+  const visibleGroups = GROUP_ORDER.map((group) => ({
+    group,
+    modules: MODULES.filter((module) => module.group === group && (
+      !needle || `${module.label} ${module.description} ${module.id}`.toLowerCase().includes(needle)
+    )),
+  })).filter((entry) => entry.modules.length > 0);
 
   const select = (id: ModuleMeta['id']) => {
     setModule(id);
@@ -40,11 +50,21 @@ export function LeftNav({ mobileOpen, onMobileClose }: LeftNavProps) {
       </div>
 
       <nav aria-label="Simulation modules" className="aether-scroll flex-1 overflow-y-auto px-1.5 py-2">
-        {GROUP_ORDER.map((group) => (
+        {!collapsed ? (
+          <input
+            type="search"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            aria-label="Search modules"
+            placeholder="Search modules…"
+            className="aether-mono mb-2 w-full rounded border border-[var(--aether-border)] bg-[var(--aether-bg-raised)] px-2 py-1.5 text-[10px] outline-none"
+          />
+        ) : null}
+        {visibleGroups.map(({ group, modules }) => (
           <div key={group} className="mb-3">
             {!collapsed ? <div className="aether-label mb-1.5 px-2">{MODULE_GROUPS[group]}</div> : <div className="mx-2 mb-2 border-t border-[var(--aether-border)]" />}
             <div className="space-y-0.5">
-              {MODULES.filter((module) => module.group === group).map((module) => {
+              {modules.map((module) => {
                 const active = activeModule === module.id;
                 const button = (
                   <button
