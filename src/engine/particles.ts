@@ -83,9 +83,7 @@ export class ParticleSystem {
     return this.time;
   }
 
-  getRandom(): number {
-    return this.random();
-  }
+  getRandom = (): number => this.random();
 
   /** Insert a particle, recycling the oldest slot when the pool is full. */
   spawn(particle: ParticleSpawn): number {

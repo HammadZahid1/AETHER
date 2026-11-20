@@ -87,8 +87,8 @@ export function createWindField(config: WindConfig, pressure?: PressureSampler):
 
 /** Stable jet-stream band used for wind field presets. */
 export function jetStreamBoost(latitude: number, longitude: number, time: number): number {
-  const north = Math.exp(-((latitude - 45) / 9) ** 2);
-  const south = Math.exp(-((latitude + 45) / 9) ** 2);
+  const north = Math.exp(-(((latitude - 45) / 9) ** 2));
+  const south = Math.exp(-(((latitude + 45) / 9) ** 2));
   const wobble = valueNoise3D(longitude * DEG_TO_RAD * 2, time * 0.02, 0.5, 7) * 0.35 + 1;
   return (north + south) * wobble;
 }

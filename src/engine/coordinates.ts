@@ -12,6 +12,11 @@ export function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
 }
 
+/** Linear interpolation between two numbers. */
+export function lerp(a: number, b: number, t: number): number {
+  return a + (b - a) * t;
+}
+
 /** Normalize a latitude into [-90, 90]. */
 export function normalizeLatitude(latitude: number): number {
   if (!Number.isFinite(latitude)) return 0;

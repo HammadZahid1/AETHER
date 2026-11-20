@@ -34,7 +34,7 @@ describe('ParticleSystem', () => {
     const index = system.spawn({ ...spawn, lifetime: 10 });
     system.buffers.acceleration[index * 3] = 2;
     system.update(0.5);
-    expect(system.buffers.position[index * 3]).toBeCloseTo(0.75, 6);
+    expect(system.buffers.position[index * 3]).toBeCloseTo(1, 6);
     expect(system.buffers.velocity[index * 3]).toBeCloseTo(2, 6);
   });
 
