@@ -28,6 +28,7 @@ export function ScenarioBrowser({ open, onClose }: ScenarioBrowserProps) {
   const loadSavedConfiguration = useAetherStore((state) => state.loadSavedConfiguration);
   const removeSavedConfiguration = useAetherStore((state) => state.removeSavedConfiguration);
   const renameSavedConfiguration = useAetherStore((state) => state.renameSavedConfiguration);
+  const duplicateSavedConfiguration = useAetherStore((state) => state.duplicateSavedConfiguration);
   const importSavedConfiguration = useAetherStore((state) => state.importSavedConfiguration);
   const applyScenario = useAetherStore((state) => state.applyScenario);
   const notify = useAetherStore((state) => state.notify);
@@ -150,6 +151,7 @@ export function ScenarioBrowser({ open, onClose }: ScenarioBrowserProps) {
                         setRenamingId(item.id);
                         setRenameText(item.name);
                       }}>Rename</Button>
+                      <Button size="sm" variant="ghost" icon="plus" aria-label={`Duplicate ${item.name}`} onClick={() => duplicateSavedConfiguration(item.id)} />
                       <Button size="sm" variant="ghost" onClick={() => { loadSavedConfiguration(item.id); onClose(); }}>Load</Button>
                       <Button size="sm" variant="ghost" icon="trash" onClick={() => removeSavedConfiguration(item.id)} aria-label={`Delete ${item.name}`} />
                     </>
