@@ -4,6 +4,7 @@ import type {
   SimulationClockState,
   SimulationContext,
   SimulationError,
+  EngineDiagnostics,
   SimulationModule,
   SimulationModuleId,
   SimulationStatus,
@@ -145,6 +146,17 @@ export class SimulationEngine {
 
   getErrors(): readonly SimulationError[] {
     return [...this.errors];
+  }
+
+  /** Return a compact health summary without exposing internal collections. */
+  diagnostics(): EngineDiagnostics {
+    return {
+      registeredModules: this.modules.size,
+      activeModules: this.active.size,
+      errors: this.errors.length,
+      latestError: this.errors.length ? { ...this.errors[this.errors.length - 1] } : null,
+      running: this.running,
+    };
   }
 
   clearErrors(): void {

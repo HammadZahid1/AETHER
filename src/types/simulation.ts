@@ -83,6 +83,15 @@ export interface SimulationError {
   at: number;
 }
 
+/** Lightweight engine health summary for diagnostics overlays. */
+export interface EngineDiagnostics {
+  registeredModules: number;
+  activeModules: number;
+  errors: number;
+  latestError: SimulationError | null;
+  running: boolean;
+}
+
 export const MODULE_IDS: readonly SimulationModuleId[] = [
   'earth',
   'atmosphere',
