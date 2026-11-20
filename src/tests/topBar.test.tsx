@@ -25,6 +25,12 @@ describe('TopBar saved views', () => {
     expect(useAetherStore.getState().camera.preset).toBe('North Atlantic');
   });
 
+  it('opens the data provenance dialog', () => {
+    render(<TopBar onToggleFullscreen={() => undefined} isFullscreen={false} />);
+    fireEvent.click(screen.getByLabelText('Open data provenance'));
+    expect(useAetherStore.getState().provenanceOpen).toBe(true);
+  });
+
   it('deletes a saved view from the camera menu', () => {
     render(<TopBar onToggleFullscreen={() => undefined} isFullscreen={false} />);
     fireEvent.click(screen.getByText('Global View'));
