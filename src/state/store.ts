@@ -61,6 +61,7 @@ export interface AetherState {
   applyCameraPreset: (preset: CameraPreset) => void;
   loadScenarioById: (id: string) => boolean;
   applyScenario: (scenario: Scenario) => void;
+  getCurrentScenario: (name?: string) => Scenario;
   saveCurrentConfiguration: (name: string) => void;
   loadSavedConfiguration: (id: string) => void;
   removeSavedConfiguration: (id: string) => void;
@@ -162,20 +163,24 @@ export const useAetherStore = create<AetherState>((set, get) => ({
     status: 'running',
   })),
 
-  saveCurrentConfiguration: (name) => {
+  getCurrentScenario: (name) => {
     const state = get();
-    const scenario: Scenario = {
+    return {
       id: `custom-${Date.now()}`,
-      name,
+      name: name ?? 'AETHER configuration',
       description: 'User-saved AETHER configuration.',
       category: 'circulation',
       module: state.activeModule,
       layers: (Object.keys(state.layers) as LayerId[]).filter((id) => state.layers[id].visible),
-      camera: { name: state.camera.preset, target: state.camera.target, distance: state.camera.distance },
+      camera: { name: state.camera.preset, target: { ...state.camera.target }, distance: state.camera.distance },
       time: state.elapsed,
       speed: state.speed,
-      configurations: state.configurations,
+      configurations: structuredClone(state.configurations),
     };
+  },
+
+  saveCurrentConfiguration: (name) => {
+    const scenario = get().getCurrentScenario(name);
     const saved: SavedConfiguration = { id: scenario.id, name, createdAt: Date.now(), updatedAt: Date.now(), scenario };
     set({ savedConfigurations: upsertConfiguration(saved), activeScenarioId: saved.id });
     get().notify(`Saved “${name}”`, 'success');
