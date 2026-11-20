@@ -22,6 +22,7 @@ export function ScenarioBrowser({ open, onClose }: ScenarioBrowserProps) {
   const saved = useAetherStore((state) => state.savedConfigurations);
   const activeScenarioId = useAetherStore((state) => state.activeScenarioId);
   const saveCurrentConfiguration = useAetherStore((state) => state.saveCurrentConfiguration);
+  const getCurrentScenario = useAetherStore((state) => state.getCurrentScenario);
   const loadSavedConfiguration = useAetherStore((state) => state.loadSavedConfiguration);
   const removeSavedConfiguration = useAetherStore((state) => state.removeSavedConfiguration);
   const importSavedConfiguration = useAetherStore((state) => state.importSavedConfiguration);
@@ -36,9 +37,7 @@ export function ScenarioBrowser({ open, onClose }: ScenarioBrowserProps) {
     return matchesCategory && matchesQuery;
   });
 
-  const download = (id: string) => {
-    const scenario = SCENARIOS.find((item) => item.id === id);
-    if (!scenario) return;
+  const downloadScenario = (scenario: (typeof SCENARIOS)[number]) => {
     const blob = new Blob([exportScenario(scenario)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement('a');
@@ -46,6 +45,11 @@ export function ScenarioBrowser({ open, onClose }: ScenarioBrowserProps) {
     anchor.download = `${scenario.id}.json`;
     anchor.click();
     URL.revokeObjectURL(url);
+  };
+
+  const download = (id: string) => {
+    const scenario = SCENARIOS.find((item) => item.id === id);
+    if (scenario) downloadScenario(scenario);
   };
 
   const importConfiguration = () => {
@@ -109,7 +113,10 @@ export function ScenarioBrowser({ open, onClose }: ScenarioBrowserProps) {
         <section className="border-t border-[var(--aether-border)] pt-4">
           <div className="mb-2 flex items-center justify-between">
             <h3 className="aether-label">Saved configurations</h3>
-            <Button size="sm" variant="ghost" icon="plus" onClick={() => saveCurrentConfiguration(`Configuration ${saved.length + 1}`)}>Save current</Button>
+            <div className="flex gap-1.5">
+              <Button size="sm" variant="ghost" icon="download" onClick={() => downloadScenario(getCurrentScenario())}>Export current</Button>
+              <Button size="sm" variant="ghost" icon="plus" onClick={() => saveCurrentConfiguration(`Configuration ${saved.length + 1}`)}>Save current</Button>
+            </div>
           </div>
           {saved.length === 0 ? (
             <p className="text-[11px] text-[var(--aether-text-dim)]">No configurations saved in this browser.</p>
