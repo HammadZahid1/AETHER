@@ -61,6 +61,25 @@ describe('ScenarioBrowser', () => {
     expect(useAetherStore.getState().savedConfigurations[0].name).toBe('New name');
   });
 
+  it('duplicates a saved configuration', () => {
+    localStorage.clear();
+    const saved = {
+      id: 'saved-duplicate',
+      name: 'Baseline',
+      createdAt: 1,
+      updatedAt: 1,
+      scenario: {
+        id: 'saved-duplicate', name: 'Baseline', description: '', category: 'circulation' as const,
+        module: 'wind' as const, layers: [], camera: { name: 'View', target: { latitude: 0, longitude: 0 }, distance: 2.8 },
+        time: 0, speed: 1, configurations: {},
+      },
+    };
+    useAetherStore.setState({ savedConfigurations: upsertConfiguration(saved) });
+    render(<ScenarioBrowser open onClose={vi.fn()} />);
+    fireEvent.click(screen.getByLabelText('Duplicate Baseline'));
+    expect(useAetherStore.getState().savedConfigurations.map((item) => item.name)).toEqual(['Baseline', 'Baseline Copy']);
+  });
+
   it('shows validation errors for invalid imported JSON', () => {
     render(<ScenarioBrowser open onClose={vi.fn()} />);
     fireEvent.change(screen.getByLabelText('Scenario JSON'), { target: { value: '{bad json' } });
