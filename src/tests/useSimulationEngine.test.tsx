@@ -1,5 +1,6 @@
 import { act, renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { simulationEngine } from '@/engine/engine';
 import { useSimulationEngine } from '@/hooks/useSimulationEngine';
 import { useAetherStore } from '@/state/store';
 
@@ -32,5 +33,21 @@ describe('useSimulationEngine', () => {
     expect(useAetherStore.getState().elapsed).toBeCloseTo(0.25, 6);
     expect(useAetherStore.getState().status).toBe('paused');
     expect(useAetherStore.getState().direction).toBe(1);
+  });
+
+  it('raises a notification when a module reports an error', () => {
+    let frameCallback: FrameRequestCallback = () => undefined;
+    vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => {
+      frameCallback = callback;
+      return 1;
+    });
+    useAetherStore.setState({ notifications: [] });
+    const errors = vi.spyOn(simulationEngine, 'getErrors').mockReturnValue([{
+      module: 'wind', message: 'sample failure', at: 0,
+    }]);
+    renderHook(() => useSimulationEngine());
+    act(() => frameCallback(performance.now() + 16));
+    expect(useAetherStore.getState().notifications.some((item) => item.message.includes('sample failure'))).toBe(true);
+    errors.mockRestore();
   });
 });
