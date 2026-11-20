@@ -1,5 +1,5 @@
-import { DEG_TO_RAD, angularDistance } from '@/engine/coordinates';
-import { angularDistance as geoAngularDistance } from '@/simulations/pressure/field';
+import { DEG_TO_RAD } from '@/engine/coordinates';
+import { angularDistance } from '@/simulations/pressure/field';
 import { clamp } from '@/engine/coordinates';
 import type { StormConfig } from '@/types/config';
 import type { GeoCoordinates } from '@/types/geo';
@@ -48,7 +48,7 @@ export function stormBearing(center: GeoCoordinates, latitude: number, longitude
 /** Sample the simplified storm structure at a geographic position. */
 export function sampleStorm(config: StormConfig, latitude: number, longitude: number, time = 0): StormSample {
   const center = stormCenterAt(config, time);
-  const radius = geoAngularDistance(latitude, longitude, center.latitude, center.longitude);
+  const radius = angularDistance(latitude, longitude, center.latitude, center.longitude);
   const normalizedRadius = clamp(radius / Math.max(1, config.radius), 0, 4);
   const bearing = stormBearing(center, latitude, longitude);
   const spiralPhase = bearing * DEG_TO_RAD - normalizedRadius * 3.2 * config.rotation;
