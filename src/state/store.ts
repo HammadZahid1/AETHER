@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { createDefaultConfigurations, createDefaultLayerState, createDefaultSettings } from '@/data/defaults';
 import { getScenario } from '@/data/scenarios';
 import { layersFromScenario, mergeConfigurations } from '@/engine/scenarios';
-import { loadSavedConfigurations, loadSavedViews, loadSettings, saveSettings, saveSavedView, upsertConfiguration, deleteConfiguration, renameConfiguration } from '@/state/persistence';
+import { loadSavedConfigurations, loadSavedViews, loadSettings, saveSettings, saveSavedView, upsertConfiguration, deleteConfiguration, renameConfiguration, deleteSavedView, renameSavedView } from '@/state/persistence';
 import type { AppSettings, SimulationConfigurations } from '@/types/config';
 import type { CameraPreset, SavedConfiguration, Scenario } from '@/types/scenario';
 import type { GeoCoordinates } from '@/types/geo';
@@ -66,6 +66,9 @@ export interface AetherState {
   removeSavedConfiguration: (id: string) => void;
   renameSavedConfiguration: (id: string, name: string) => void;
   saveCurrentView: (name: string) => void;
+  applySavedView: (id: string) => void;
+  removeSavedView: (id: string) => void;
+  renameSavedView: (id: string, name: string) => void;
   importSavedConfiguration: (configuration: SavedConfiguration) => void;
   setCommandPaletteOpen: (open: boolean) => void;
   setSettingsOpen: (open: boolean) => void;
@@ -193,6 +196,19 @@ export const useAetherStore = create<AetherState>((set, get) => ({
     set({ savedViews: saveSavedView({ id: `view-${Date.now()}`, name, target: camera.target, distance: camera.distance, createdAt: Date.now() }) });
     get().notify(`Saved view “${name}”`, 'success');
   },
+
+  applySavedView: (id) => {
+    const view = get().savedViews.find((item) => item.id === id);
+    if (!view) return;
+    set((state) => ({
+      camera: { ...state.camera, target: { ...view.target }, distance: view.distance, preset: view.name },
+    }));
+    get().notify(`Loaded view “${view.name}”`, 'info');
+  },
+
+  removeSavedView: (id) => set({ savedViews: deleteSavedView(id) }),
+
+  renameSavedView: (id, name) => set({ savedViews: renameSavedView(id, name) }),
 
   importSavedConfiguration: (configuration) => {
     set(() => ({ savedConfigurations: upsertConfiguration(configuration) }));
