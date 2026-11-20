@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { createDefaultConfigurations, createDefaultLayerState, createDefaultSettings } from '@/data/defaults';
 import { getScenario } from '@/data/scenarios';
 import { cloneScenario, layersFromScenario, mergeConfigurations } from '@/engine/scenarios';
-import { loadSavedConfigurations, loadSavedViews, loadSettings, saveSettings, saveSavedView, upsertConfiguration, deleteConfiguration, renameConfiguration, deleteSavedView, renameSavedView } from '@/state/persistence';
+import { clearAllPersistedData, loadSavedConfigurations, loadSavedViews, loadSettings, saveSettings, saveSavedView, upsertConfiguration, deleteConfiguration, renameConfiguration, deleteSavedView, renameSavedView } from '@/state/persistence';
 import type { AppSettings, SimulationConfigurations } from '@/types/config';
 import type { CameraPreset, SavedConfiguration, Scenario } from '@/types/scenario';
 import type { GeoCoordinates } from '@/types/geo';
@@ -79,6 +79,7 @@ export interface AetherState {
   notify: (message: string, tone?: Notification['tone']) => void;
   dismissNotification: (id: string) => void;
   resetSimulation: () => void;
+  clearAllData: () => void;
 }
 
 const initialSettings = loadSettings();
@@ -250,6 +251,17 @@ export const useAetherStore = create<AetherState>((set, get) => ({
     elapsed: 0,
     selectedCoordinate: null,
   }),
+
+  clearAllData: () => {
+    clearAllPersistedData();
+    set({
+      settings: createDefaultSettings(),
+      savedConfigurations: [],
+      savedViews: [],
+      activeScenarioId: null,
+    });
+    get().notify('All locally saved data was cleared', 'warning');
+  },
 }));
 
 /** Reset persisted preferences to their defaults. */
