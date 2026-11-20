@@ -35,10 +35,14 @@ function Toast({ notification }: { notification: Notification }) {
 /** Transient feedback for scenario, layer, view and settings actions. */
 export function Notifications() {
   const notifications = useAetherStore((state) => state.notifications);
-  if (notifications.length === 0) return null;
 
   return (
-    <div className="pointer-events-none fixed bottom-[74px] right-3 z-[70] flex flex-col gap-2" aria-live="polite">
+    <div
+      className="pointer-events-none fixed bottom-[74px] right-3 z-[70] flex flex-col gap-2"
+      aria-live="polite"
+      aria-atomic="false"
+      role="status"
+    >
       {notifications.map((notification) => (
         <div key={notification.id} className="pointer-events-auto">
           <Toast notification={notification} />
