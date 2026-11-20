@@ -13,11 +13,13 @@ export const TEMPERATURE_TEXTURE_HEIGHT = 64;
 export class TemperatureSimulation implements SimulationModule<TemperatureConfig> {
   readonly id = 'temperature' as const;
   readonly name = 'Temperature Lab';
-  private field = createTemperatureField(this.config);
+  private field: ReturnType<typeof createTemperatureField>;
   private textureData = new Uint8Array(TEMPERATURE_TEXTURE_WIDTH * TEMPERATURE_TEXTURE_HEIGHT * 4);
   private lastRasterTime = Number.NaN;
 
-  constructor(public config: TemperatureConfig) {}
+  constructor(public config: TemperatureConfig) {
+    this.field = createTemperatureField(config);
+  }
 
   update(context: SimulationContext): void {
     if (!this.config.enabled) return;

@@ -17,12 +17,14 @@ export interface ContourLine {
 export class PressureSimulation implements SimulationModule<PressureConfig> {
   readonly id = 'pressure' as const;
   readonly name = 'Pressure Systems';
-  private field = createPressureField(this.config);
+  private field: ReturnType<typeof createPressureField>;
   private textureData = new Uint8Array(PRESSURE_TEXTURE_WIDTH * PRESSURE_TEXTURE_HEIGHT * 4);
   private contours: ContourLine[] = [];
   private lastUpdate = Number.NaN;
 
-  constructor(public config: PressureConfig) {}
+  constructor(public config: PressureConfig) {
+    this.field = createPressureField(config);
+  }
 
   update(context: SimulationContext): void {
     if (!this.config.enabled) return;

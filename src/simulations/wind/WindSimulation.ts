@@ -8,7 +8,7 @@ import { WindParticles } from '@/simulations/wind/particles';
 export class WindSimulation implements SimulationModule<WindConfig> {
   readonly id = 'wind' as const;
   readonly name = 'Wind Flow Lab';
-  private field = createWindField(this.config);
+  private field: ReturnType<typeof createWindField>;
   private particles: WindParticles;
 
   constructor(public config: WindConfig, private readonly pressure?: PressureSampler) {

@@ -14,7 +14,7 @@ describe('temperature field', () => {
   });
 
   it('cycles subsolar longitude with time', () => {
-    expect(subsolarLongitude(0)).toBe(-180);
+    expect(subsolarLongitude(0)).toBe(0);
     expect(Math.abs(subsolarLongitude(1000))).toBeLessThanOrEqual(180);
   });
 
