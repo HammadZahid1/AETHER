@@ -1,4 +1,5 @@
 import { DEFAULT_ATMOSPHERE, DEFAULT_CLOUDS, DEFAULT_CLIMATE, DEFAULT_OCEAN, DEFAULT_PRECIPITATION, DEFAULT_PRESSURE, DEFAULT_STORM, DEFAULT_TEMPERATURE, DEFAULT_WIND, createDefaultLayerState } from '@/data/defaults';
+import { clampConfigurations } from '@/engine/configValidation';
 import { LAYER_IDS, MODULE_IDS } from '@/types/simulation';
 import type { LayerState } from '@/types/simulation';
 import type { SimulationConfigurations } from '@/types/config';
@@ -29,7 +30,7 @@ export function validateScenario(value: unknown): ValidationResult {
 /** Deep-merge a scenario configuration onto the default configuration set. */
 export function mergeConfigurations(scenario: Scenario): SimulationConfigurations {
   const patch = scenario.configurations ?? {};
-  return {
+  return clampConfigurations({
     wind: { ...DEFAULT_WIND, ...patch.wind },
     temperature: { ...DEFAULT_TEMPERATURE, ...patch.temperature },
     pressure: { ...DEFAULT_PRESSURE, ...patch.pressure, regions: patch.pressure?.regions ?? DEFAULT_PRESSURE.regions.map((region) => ({ ...region })) },
@@ -39,7 +40,7 @@ export function mergeConfigurations(scenario: Scenario): SimulationConfiguration
     ocean: { ...DEFAULT_OCEAN, ...patch.ocean },
     climate: { ...DEFAULT_CLIMATE, ...patch.climate },
     atmosphere: { ...DEFAULT_ATMOSPHERE, ...patch.atmosphere },
-  };
+  });
 }
 
 /** Build a layer state where only the scenario layers are visible. */
