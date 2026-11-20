@@ -14,7 +14,7 @@ const controls: SimulationControls = {
 
 describe('CommandPalette', () => {
   beforeEach(() => {
-    useAetherStore.setState({ commandPaletteOpen: true, activeModule: 'earth' });
+    useAetherStore.setState({ commandPaletteOpen: true, activeModule: 'earth', savedViews: [] });
   });
 
   it('filters commands and navigates to a module', () => {
@@ -31,5 +31,21 @@ describe('CommandPalette', () => {
     render(<CommandPalette controls={controls} onResetCamera={vi.fn()} />);
     fireEvent.click(screen.getByRole('option', { name: /Play simulation/ }));
     expect(controls.play).toHaveBeenCalledOnce();
+  });
+
+  it('loads a saved camera view', () => {
+    useAetherStore.setState({
+      savedViews: [{
+        id: 'view-42',
+        name: 'Storm watch',
+        target: { latitude: 30, longitude: -70 },
+        distance: 1.8,
+        createdAt: 1,
+      }],
+    });
+    render(<CommandPalette controls={controls} onResetCamera={vi.fn()} />);
+    fireEvent.click(screen.getByRole('option', { name: /Load saved view: Storm watch/ }));
+    expect(useAetherStore.getState().camera.preset).toBe('Storm watch');
+    expect(useAetherStore.getState().commandPaletteOpen).toBe(false);
   });
 });
