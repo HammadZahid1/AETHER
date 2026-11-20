@@ -14,15 +14,15 @@ export class PrecipitationSimulation implements SimulationModule<PrecipitationCo
   readonly id = 'precipitation' as const;
   readonly name = 'Precipitation Lab';
   private particles: ParticleSystem;
-  private field = createPrecipitationField(this.config, this.center);
+  private field: ReturnType<typeof createPrecipitationField>;
 
   constructor(
     public config: PrecipitationConfig,
     private center: GeoCoordinates = { latitude: 20, longitude: -60 },
   ) {
+    this.field = createPrecipitationField(config, center);
     const count = Math.round(240 + config.density * 2200);
     this.particles = new ParticleSystem({ capacity: count, defaultLifetime: 8, seed: 1717 });
-    this.field = createPrecipitationField(config, center);
     this.reseed();
   }
 
