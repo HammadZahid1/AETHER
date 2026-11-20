@@ -20,6 +20,7 @@ import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useSimulationEngine } from '@/hooks/useSimulationEngine';
 import { useTheme } from '@/hooks/useTheme';
 import { SceneCanvas } from '@/renderer/SceneCanvas';
+import { SceneErrorBoundary } from '@/renderer/SceneErrorBoundary';
 import { useAetherStore } from '@/state/store';
 
 /** Application shell composing navigation, globe viewport, controls and overlays. */
@@ -59,7 +60,7 @@ export function App() {
       <div className="flex min-h-0 flex-1">
         <LeftNav mobileOpen={mobileNavOpen} onMobileClose={() => setMobileNavOpen(false)} />
         <main className="relative min-w-0 flex-1 overflow-hidden bg-[var(--aether-bg)]">
-          <SceneCanvas />
+          <SceneErrorBoundary><SceneCanvas /></SceneErrorBoundary>
           <MobileControls onOpenNavigation={() => setMobileNavOpen(true)} />
           <ViewportControls onOpenScenarios={() => setScenarioOpen(true)} onResetCamera={resetCamera} />
           <LegendOverlay />
