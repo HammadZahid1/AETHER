@@ -155,4 +155,18 @@ describe('SimulationEngine', () => {
     engine.dispose();
     expect(second.disposals).toBe(1);
   });
+
+  it('exposes timeline seeking through the engine facade', () => {
+    expect(engine.seek(0.42).timeline).toBeCloseTo(0.42, 6);
+    expect(engine.snapshot().timeline).toBeCloseTo(0.42, 6);
+    expect(engine.seek(2).timeline).toBeLessThan(1);
+  });
+
+  it('restores elapsed time and direction through the engine facade', () => {
+    engine.setElapsed(125);
+    engine.setDirection(-1);
+    const snapshot = engine.snapshot();
+    expect(snapshot.elapsed).toBe(125);
+    expect(snapshot.direction).toBe(-1);
+  });
 });

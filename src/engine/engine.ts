@@ -1,5 +1,7 @@
 import { SimulationClock } from '@/engine/clock';
 import type {
+  PlaybackDirection,
+  SimulationClockState,
   SimulationContext,
   SimulationError,
   SimulationModule,
@@ -78,6 +80,26 @@ export class SimulationEngine {
 
   setSpeed(speed: number): void {
     this.clock.setSpeed(speed);
+  }
+
+  setDirection(direction: PlaybackDirection): void {
+    this.clock.setDirection(direction);
+  }
+
+  /** Move the timeline without advancing simulated time. */
+  seek(progress: number): SimulationClockState {
+    this.clock.seek(progress);
+    return this.clock.snapshot();
+  }
+
+  /** Set simulated elapsed seconds directly for saved or restored states. */
+  setElapsed(seconds: number): SimulationClockState {
+    this.clock.setElapsed(seconds);
+    return this.clock.snapshot();
+  }
+
+  snapshot(): SimulationClockState {
+    return this.clock.snapshot();
   }
 
   setStatus(status: SimulationStatus): void {
