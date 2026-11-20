@@ -29,6 +29,9 @@ export function TopBar({ onToggleFullscreen, isFullscreen }: TopBarProps) {
   const setCommandPaletteOpen = useAetherStore((state) => state.setCommandPaletteOpen);
   const setCamera = useAetherStore((state) => state.setCamera);
   const saveCurrentView = useAetherStore((state) => state.saveCurrentView);
+  const savedViews = useAetherStore((state) => state.savedViews);
+  const applySavedView = useAetherStore((state) => state.applySavedView);
+  const removeSavedView = useAetherStore((state) => state.removeSavedView);
   const module = MODULE_MAP[activeModule];
 
   useEffect(() => {
@@ -97,6 +100,33 @@ export function TopBar({ onToggleFullscreen, isFullscreen }: TopBarProps) {
                   {camera.preset === view.name ? <Icon name="check" size={12} /> : null}
                 </button>
               ))}
+              {savedViews.length ? (
+                <>
+                  <div className="my-1 border-t border-[var(--aether-border)]" />
+                  <div className="aether-label px-2 py-1.5">Saved views</div>
+                  <div className="aether-scroll max-h-32 overflow-y-auto">
+                    {savedViews.map((view) => (
+                      <div key={view.id} className="flex items-center gap-1 rounded-[3px] hover:bg-white/5">
+                        <button
+                          type="button"
+                          onClick={() => { applySavedView(view.id); setViewOpen(false); }}
+                          className="min-w-0 flex-1 truncate px-2 py-1.5 text-left text-[11px] text-[var(--aether-text-muted)]"
+                        >
+                          {view.name}
+                        </button>
+                        <button
+                          type="button"
+                          aria-label={`Delete view ${view.name}`}
+                          onClick={() => removeSavedView(view.id)}
+                          className="px-1.5 py-1.5 text-[var(--aether-text-dim)] hover:text-[var(--aether-danger)]"
+                        >
+                          <Icon name="trash" size={12} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              ) : null}
               <div className="my-1 border-t border-[var(--aether-border)]" />
               <button
                 type="button"
