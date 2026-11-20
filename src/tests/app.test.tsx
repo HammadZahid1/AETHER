@@ -18,6 +18,7 @@ describe('App shell', () => {
   it('renders the main workspace regions', () => {
     render(<App />);
     expect(screen.getByText('AETHER')).toBeTruthy();
+    expect(screen.getByText('Skip to globe viewport')).toBeTruthy();
     expect(screen.getByTestId('scene-canvas')).toBeTruthy();
     expect(screen.getByLabelText('Simulation modules')).toBeTruthy();
     expect(screen.getByLabelText('Scrub simulation timeline')).toBeTruthy();
