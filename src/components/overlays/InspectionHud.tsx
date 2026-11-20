@@ -4,6 +4,7 @@ import { getSimulationModules } from '@/engine/simulationModules';
 import { inspectActiveModule } from '@/renderer/inspection';
 import { useAetherStore } from '@/state/store';
 import { MODULE_MAP } from '@/data/modules';
+import { formatCoordinate } from '@/utils/format';
 
 /** Live local readout for the coordinate selected on the globe. */
 export function InspectionHud() {
@@ -28,6 +29,12 @@ export function InspectionHud() {
         <Badge tone="warning">Simulated</Badge>
       </div>
       <dl className="space-y-1">
+        <div className="flex items-baseline justify-between gap-2">
+          <dt className="aether-label">Point</dt>
+          <dd className="aether-mono truncate text-[10px] text-[var(--aether-accent)]">
+            {formatCoordinate(selected?.latitude ?? 0, selected?.longitude ?? 0)}
+          </dd>
+        </div>
         {rows.map((row) => (
           <div key={row.label} className="flex items-baseline justify-between gap-2">
             <dt className="aether-label">{row.label}</dt>
