@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { Icon } from '@/components/ui/Icon';
 
 export interface PanelProps {
@@ -18,7 +18,7 @@ export function Panel({
   title, subtitle, eyebrow, actions, children, className = '', bodyClassName = '',
   padded = true, collapsible = false, defaultCollapsed = false,
 }: PanelProps) {
-  const [collapsed, setCollapsed] = React.useState(defaultCollapsed);
+  const [collapsed, setCollapsed] = useState(defaultCollapsed);
   const hasHeader = Boolean(title || eyebrow || actions);
   return (
     <section className={`aether-panel overflow-hidden ${className}`}>
