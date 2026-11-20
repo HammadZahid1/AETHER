@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { createDefaultConfigurations, createDefaultLayerState, createDefaultSettings } from '@/data/defaults';
 import { getScenario } from '@/data/scenarios';
-import { layersFromScenario, mergeConfigurations } from '@/engine/scenarios';
+import { cloneScenario, layersFromScenario, mergeConfigurations } from '@/engine/scenarios';
 import { loadSavedConfigurations, loadSavedViews, loadSettings, saveSettings, saveSavedView, upsertConfiguration, deleteConfiguration, renameConfiguration, deleteSavedView, renameSavedView } from '@/state/persistence';
 import type { AppSettings, SimulationConfigurations } from '@/types/config';
 import type { CameraPreset, SavedConfiguration, Scenario } from '@/types/scenario';
@@ -66,6 +66,7 @@ export interface AetherState {
   loadSavedConfiguration: (id: string) => void;
   removeSavedConfiguration: (id: string) => void;
   renameSavedConfiguration: (id: string, name: string) => void;
+  duplicateSavedConfiguration: (id: string) => void;
   saveCurrentView: (name: string) => void;
   applySavedView: (id: string) => void;
   removeSavedView: (id: string) => void;
@@ -195,6 +196,15 @@ export const useAetherStore = create<AetherState>((set, get) => ({
 
   removeSavedConfiguration: (id) => set(() => ({ savedConfigurations: deleteConfiguration(id) })),
   renameSavedConfiguration: (id, name) => set(() => ({ savedConfigurations: renameConfiguration(id, name) })),
+
+  duplicateSavedConfiguration: (id) => {
+    const saved = get().savedConfigurations.find((item) => item.id === id);
+    if (!saved) return;
+    const scenario = cloneScenario(saved.scenario, `custom-${Date.now()}`, `${saved.name} Copy`);
+    const duplicate: SavedConfiguration = { id: scenario.id, name: scenario.name, createdAt: Date.now(), updatedAt: Date.now(), scenario };
+    set({ savedConfigurations: upsertConfiguration(duplicate) });
+    get().notify(`Duplicated “${saved.name}”`, 'success');
+  },
 
   saveCurrentView: (name) => {
     const { camera } = get();

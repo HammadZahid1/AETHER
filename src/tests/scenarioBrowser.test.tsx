@@ -49,7 +49,7 @@ describe('ScenarioBrowser', () => {
       scenario: {
         id: 'saved-1', name: 'Old name', description: '', category: 'circulation' as const,
         module: 'wind' as const, layers: [], camera: { name: 'View', target: { latitude: 0, longitude: 0 }, distance: 2.8 },
-        time: 0, speed: 1,
+        time: 0, speed: 1, configurations: {},
       },
     };
     const configurations = upsertConfiguration(saved);
