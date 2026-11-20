@@ -1,4 +1,4 @@
-import { useEffect, type ReactNode } from 'react';
+import { useEffect, useRef, type ReactNode } from 'react';
 import { IconButton } from '@/components/ui/Button';
 
 export interface DialogProps {
@@ -11,9 +11,36 @@ export interface DialogProps {
 }
 
 export function Dialog({ open, onClose, title, subtitle, children, width = 'max-w-2xl' }: DialogProps) {
+  const dialogRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (!open) return;
-    const handler = (event: KeyboardEvent) => { if (event.key === 'Escape') onClose(); };
+    const focusableSelector = 'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    const dialog = dialogRef.current;
+    const focusables = dialog ? Array.from(dialog.querySelectorAll<HTMLElement>(focusableSelector)) : [];
+    (focusables[0] ?? dialog)?.focus();
+
+    const handler = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose();
+        return;
+      }
+      if (event.key !== 'Tab' || !dialog) return;
+      const items = Array.from(dialog.querySelectorAll<HTMLElement>(focusableSelector));
+      if (items.length === 0) {
+        event.preventDefault();
+        return;
+      }
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
   }, [open, onClose]);
@@ -22,6 +49,8 @@ export function Dialog({ open, onClose, title, subtitle, children, width = 'max-
   return (
     <div className="fixed inset-0 z-[80] flex items-start justify-center overflow-y-auto bg-black/65 p-4 pt-[8vh] backdrop-blur-sm" onMouseDown={onClose}>
       <div
+        ref={dialogRef}
+        tabIndex={-1}
         role="dialog"
         aria-modal="true"
         aria-label={title}
