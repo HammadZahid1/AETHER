@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { Button } from '@/components/ui/Button';
 import { Dialog } from '@/components/ui/Dialog';
 import { Select } from '@/components/ui/Select';
 import { Slider } from '@/components/ui/Slider';
@@ -14,6 +16,8 @@ export function SettingsDialog() {
   const settings = useAetherStore((state) => state.settings);
   const updateSettings = useAetherStore((state) => state.updateSettings);
   const notify = useAetherStore((state) => state.notify);
+  const clearAllData = useAetherStore((state) => state.clearAllData);
+  const [confirmClear, setConfirmClear] = useState(false);
 
   const updateRendering = (patch: Partial<RenderingConfig>) => {
     updateSettings({ rendering: { ...settings.rendering, ...patch } });
@@ -107,6 +111,19 @@ export function SettingsDialog() {
           <p className="mt-2 text-[10px] leading-snug text-[var(--aether-text-dim)]">
             AETHER data is procedurally simulated for exploration and teaching. It is not a weather forecast or observational dataset.
           </p>
+        </section>
+
+        <section className="border-t border-[var(--aether-border)] pt-4">
+          <div className="aether-label mb-2 text-[var(--aether-danger)]">Local data</div>
+          {confirmClear ? (
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-[11px] text-[var(--aether-text-muted)]">Clear settings, saved views and configurations?</span>
+              <Button size="sm" variant="danger" onClick={() => { clearAllData(); setConfirmClear(false); }}>Confirm clear</Button>
+              <Button size="sm" variant="ghost" onClick={() => setConfirmClear(false)}>Cancel</Button>
+            </div>
+          ) : (
+            <Button size="sm" variant="danger" onClick={() => setConfirmClear(true)}>Clear all local data</Button>
+          )}
         </section>
       </div>
     </Dialog>
