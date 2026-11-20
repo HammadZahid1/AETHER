@@ -1,7 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { ScenarioBrowser } from '@/components/overlays/ScenarioBrowser';
-import { useAetherStore } from '@/state/store';
 
 describe('ScenarioBrowser', () => {
   it('loads a built-in scenario and closes', () => {
