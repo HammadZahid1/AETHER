@@ -8,6 +8,7 @@ import { LayersPanel } from '@/components/overlays/LayersPanel';
 import { LegendOverlay } from '@/components/overlays/LegendOverlay';
 import { MobileControls } from '@/components/overlays/MobileControls';
 import { Notifications } from '@/components/overlays/Notifications';
+import { PerformanceHud } from '@/components/overlays/PerformanceHud';
 import { ScenarioBrowser } from '@/components/overlays/ScenarioBrowser';
 import { SettingsDialog } from '@/components/overlays/SettingsDialog';
 import { ViewportControls } from '@/components/overlays/ViewportControls';
@@ -64,6 +65,7 @@ export function App() {
           <LegendOverlay />
           <InspectionHud />
           <DiagnosticsOverlay />
+          <PerformanceHud />
           <button
             type="button"
             onClick={() => setMobilePanelOpen(true)}
