@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { AtmosphereShell } from '@/renderer/AtmosphereShell';
 import { CameraRig } from '@/renderer/CameraRig';
@@ -15,11 +16,15 @@ import { StormLayer } from '@/renderer/layers/StormLayer';
 import { TemperatureLayer } from '@/renderer/layers/TemperatureLayer';
 import { WindLayer } from '@/renderer/layers/WindLayer';
 import { WindVectorLayer } from '@/renderer/layers/WindVectorLayer';
+import { isWebGLAvailable } from '@/renderer/webgl';
+import { WebGLFallback } from '@/renderer/WebGLFallback';
 import { useAetherStore } from '@/state/store';
 
 /** Root WebGL scene composing the globe and every optional visualization layer. */
 export function SceneCanvas() {
   const rendering = useAetherStore((state) => state.settings.rendering);
+  const webglAvailable = useMemo(isWebGLAvailable, []);
+  if (!webglAvailable) return <WebGLFallback />;
 
   return (
     <Canvas
