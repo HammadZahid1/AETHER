@@ -42,6 +42,7 @@ export interface AetherState {
   settingsOpen: boolean;
   helpOpen: boolean;
   provenanceOpen: boolean;
+  diagnosticsOpen: boolean;
   layersPanelOpen: boolean;
   notifications: Notification[];
 
@@ -77,6 +78,7 @@ export interface AetherState {
   setSettingsOpen: (open: boolean) => void;
   setHelpOpen: (open: boolean) => void;
   setProvenanceOpen: (open: boolean) => void;
+  setDiagnosticsOpen: (open: boolean) => void;
   setLayersPanelOpen: (open: boolean) => void;
   notify: (message: string, tone?: Notification['tone']) => void;
   dismissNotification: (id: string) => void;
@@ -106,6 +108,7 @@ export const useAetherStore = create<AetherState>((set, get) => ({
   settingsOpen: false,
   helpOpen: false,
   provenanceOpen: false,
+  diagnosticsOpen: false,
   layersPanelOpen: false,
   notifications: [],
 
@@ -238,6 +241,7 @@ export const useAetherStore = create<AetherState>((set, get) => ({
   setSettingsOpen: (settingsOpen) => set({ settingsOpen }),
   setHelpOpen: (helpOpen) => set({ helpOpen }),
   setProvenanceOpen: (provenanceOpen) => set({ provenanceOpen }),
+  setDiagnosticsOpen: (diagnosticsOpen) => set({ diagnosticsOpen }),
   setLayersPanelOpen: (layersPanelOpen) => set({ layersPanelOpen }),
 
   notify: (message, tone = 'info') => set((state) => ({
