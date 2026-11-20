@@ -46,7 +46,7 @@ export function generateEarthTexture(options: EarthTextureOptions = {}): Uint8Ar
     const phi = latitude * DEG_TO_RAD;
     const cosPhi = Math.cos(phi);
     for (let x = 0; x < width; x += 1) {
-      const longitude = (x / (width - 1)) * 360 - 180;
+      const longitude = (x / (width - 1)) * 360;
       const lambda = longitude * DEG_TO_RAD;
       const nx = cosPhi * Math.cos(lambda);
       const ny = Math.sin(phi);
