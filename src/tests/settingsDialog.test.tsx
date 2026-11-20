@@ -13,6 +13,13 @@ describe('SettingsDialog', () => {
     expect(localStorage.getItem('aether.settings.v1')).toContain('midnight');
   });
 
+  it('applies a rendering preset when quality changes', () => {
+    render(<SettingsDialog />);
+    fireEvent.change(screen.getByLabelText('Quality mode'), { target: { value: 'low' } });
+    expect(useAetherStore.getState().settings.rendering.pixelRatioCap).toBe(1);
+    expect(useAetherStore.getState().settings.rendering.antialias).toBe(false);
+  });
+
   it('clears locally saved data after confirmation', () => {
     localStorage.clear();
     useAetherStore.setState({
