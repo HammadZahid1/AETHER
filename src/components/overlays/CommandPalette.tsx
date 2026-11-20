@@ -29,6 +29,7 @@ export function CommandPalette({ controls, onResetCamera }: CommandPaletteProps)
   const setSettingsOpen = useAetherStore((state) => state.setSettingsOpen);
   const setHelpOpen = useAetherStore((state) => state.setHelpOpen);
   const setLayersPanelOpen = useAetherStore((state) => state.setLayersPanelOpen);
+  const setDiagnosticsOpen = useAetherStore((state) => state.setDiagnosticsOpen);
   const savedViews = useAetherStore((state) => state.savedViews);
   const applySavedView = useAetherStore((state) => state.applySavedView);
   const [query, setQuery] = useState('');
@@ -65,6 +66,7 @@ export function CommandPalette({ controls, onResetCamera }: CommandPaletteProps)
     { id: 'settings', label: 'Open settings', group: 'View', icon: 'settings', run: () => setSettingsOpen(true) },
     { id: 'help', label: 'Open help', group: 'View', icon: 'help', run: () => setHelpOpen(true) },
     { id: 'layers', label: 'Open layers panel', group: 'View', icon: 'layers', run: () => setLayersPanelOpen(true) },
+    { id: 'diagnostics', label: 'Toggle engine diagnostics', group: 'View', icon: 'info', run: () => setDiagnosticsOpen(!useAetherStore.getState().diagnosticsOpen) },
     ...savedViews.map((view) => ({
       id: `saved-view-${view.id}`,
       label: `Load saved view: ${view.name}`,
@@ -72,7 +74,7 @@ export function CommandPalette({ controls, onResetCamera }: CommandPaletteProps)
       icon: 'camera' as IconName,
       run: () => applySavedView(view.id),
     })),
-  ], [applySavedView, controls, loadScenarioById, onResetCamera, savedViews, setHelpOpen, setLayersPanelOpen, setModule, setSettingsOpen, toggleLayer]);
+  ], [applySavedView, controls, loadScenarioById, onResetCamera, savedViews, setDiagnosticsOpen, setHelpOpen, setLayersPanelOpen, setModule, setSettingsOpen, toggleLayer]);
 
   const filtered = useMemo(() => {
     const needle = query.trim().toLowerCase();

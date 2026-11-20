@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { CommandPalette } from '@/components/overlays/CommandPalette';
 import { DataProvenanceDialog } from '@/components/overlays/DataProvenanceDialog';
+import { DiagnosticsOverlay } from '@/components/overlays/DiagnosticsOverlay';
 import { HelpDialog } from '@/components/overlays/HelpDialog';
 import { InspectionHud } from '@/components/overlays/InspectionHud';
 import { LayersPanel } from '@/components/overlays/LayersPanel';
@@ -62,6 +63,7 @@ export function App() {
           <ViewportControls onOpenScenarios={() => setScenarioOpen(true)} onResetCamera={resetCamera} />
           <LegendOverlay />
           <InspectionHud />
+          <DiagnosticsOverlay />
           <button
             type="button"
             onClick={() => setMobilePanelOpen(true)}
