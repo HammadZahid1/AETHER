@@ -15,7 +15,9 @@ export class ClimateSimulation implements SimulationModule<ClimateConfig> {
   private texture = new Uint8Array(CLIMATE_TEXTURE_WIDTH * CLIMATE_TEXTURE_HEIGHT * 4);
   private lastSeason = Number.NaN;
 
-  constructor(public config: ClimateConfig) {}
+  constructor(public config: ClimateConfig) {
+    this.rasterize();
+  }
 
   update(context: SimulationContext): void {
     if (!this.config.enabled) return;
