@@ -6,6 +6,7 @@ import type { SimulationContext } from '@/types/simulation';
 
 const config = () => ({
   ...DEFAULT_PRESSURE,
+  enabled: true,
   regions: DEFAULT_PRESSURE.regions.map((region) => ({ ...region, center: { ...region.center } })),
 });
 const context: SimulationContext = { time: 0, delta: 0.05, speed: 1, direction: 1, frame: 1, timeline: 0 };
