@@ -1,8 +1,8 @@
-import type { AppSettings, SimulationConfigurations } from '@/types/config';
+import type { AppSettings, SimulationConfigurations, WindConfig, TemperatureConfig, PressureConfig, CloudConfig, PrecipitationConfig, StormConfig, OceanConfig, ClimateConfig, AtmosphereConfig } from '@/types/config';
 import type { LayerId, LayerState } from '@/types/simulation';
 import { LAYER_IDS } from '@/types/simulation';
 
-export const DEFAULT_WIND = {
+export const DEFAULT_WIND: WindConfig = {
   enabled: true,
   speed: 1.1,
   intensity: 0.65,
@@ -14,9 +14,9 @@ export const DEFAULT_WIND = {
   flowVisible: true,
   vectorsVisible: false,
   mode: 'particles',
-} as const;
+};
 
-export const DEFAULT_TEMPERATURE = {
+export const DEFAULT_TEMPERATURE: TemperatureConfig = {
   enabled: true,
   globalTemperature: 15,
   seasonalIntensity: 0.5,
@@ -27,9 +27,9 @@ export const DEFAULT_TEMPERATURE = {
   scaleMin: -40,
   scaleMax: 45,
   mode: 'heatmap',
-} as const;
+};
 
-export const DEFAULT_PRESSURE = {
+export const DEFAULT_PRESSURE: PressureConfig = {
   enabled: false,
   intensity: 1,
   gradient: 0.65,
@@ -41,9 +41,9 @@ export const DEFAULT_PRESSURE = {
     { id: 'h1', label: 'Azores High', center: { latitude: 35, longitude: -28 }, strength: 1, radius: 28 },
     { id: 'l1', label: 'Icelandic Low', center: { latitude: 63, longitude: -22 }, strength: -1, radius: 24 },
   ],
-} as const;
+};
 
-export const DEFAULT_CLOUDS = {
+export const DEFAULT_CLOUDS: CloudConfig = {
   enabled: true,
   density: 0.5,
   coverage: 0.52,
@@ -52,9 +52,9 @@ export const DEFAULT_CLOUDS = {
   size: 0.09,
   movementSpeed: 0.4,
   layerCount: 2,
-} as const;
+};
 
-export const DEFAULT_PRECIPITATION = {
+export const DEFAULT_PRECIPITATION: PrecipitationConfig = {
   enabled: false,
   density: 0.35,
   intensity: 0.5,
@@ -62,9 +62,9 @@ export const DEFAULT_PRECIPITATION = {
   particleSize: 0.008,
   regionRadius: 18,
   distribution: 'regional',
-} as const;
+};
 
-export const DEFAULT_STORM = {
+export const DEFAULT_STORM: StormConfig = {
   enabled: false,
   center: { latitude: 18, longitude: -55 },
   intensity: 0.75,
@@ -76,9 +76,9 @@ export const DEFAULT_STORM = {
   windIntensity: 0.85,
   rainIntensity: 0.65,
   trajectoryVisible: true,
-} as const;
+};
 
-export const DEFAULT_OCEAN = {
+export const DEFAULT_OCEAN: OceanConfig = {
   enabled: false,
   currentSpeed: 0.8,
   particleCount: 1800,
@@ -86,9 +86,9 @@ export const DEFAULT_OCEAN = {
   streamlinesVisible: true,
   temperatureOverlay: true,
   temperature: 18,
-} as const;
+};
 
-export const DEFAULT_CLIMATE = {
+export const DEFAULT_CLIMATE: ClimateConfig = {
   enabled: false,
   dataset: 'temperature',
   season: 0,
@@ -96,16 +96,16 @@ export const DEFAULT_CLIMATE = {
   rainfallIntensity: 0.6,
   zonesVisible: true,
   comparisonMode: false,
-} as const;
+};
 
-export const DEFAULT_ATMOSPHERE = {
+export const DEFAULT_ATMOSPHERE: AtmosphereConfig = {
   visible: true,
   layerId: 'troposphere',
   opacity: 0.55,
   height: 0.06,
   glow: 0.7,
   transitionSpeed: 1,
-} as const;
+};
 
 export function createDefaultConfigurations(): SimulationConfigurations {
   return {

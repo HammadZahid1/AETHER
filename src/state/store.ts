@@ -185,8 +185,8 @@ export const useAetherStore = create<AetherState>((set, get) => ({
     get().notify(`Loaded “${saved.name}”`, 'info');
   },
 
-  removeSavedConfiguration: (id) => set((state) => ({ savedConfigurations: deleteConfiguration(id) })),
-  renameSavedConfiguration: (id, name) => set((state) => ({ savedConfigurations: renameConfiguration(id, name) })),
+  removeSavedConfiguration: (id) => set(() => ({ savedConfigurations: deleteConfiguration(id) })),
+  renameSavedConfiguration: (id, name) => set(() => ({ savedConfigurations: renameConfiguration(id, name) })),
 
   saveCurrentView: (name) => {
     const { camera } = get();
@@ -195,7 +195,7 @@ export const useAetherStore = create<AetherState>((set, get) => ({
   },
 
   importSavedConfiguration: (configuration) => {
-    set((state) => ({ savedConfigurations: upsertConfiguration(configuration) }));
+    set(() => ({ savedConfigurations: upsertConfiguration(configuration) }));
     get().notify(`Imported “${configuration.name}”`, 'success');
   },
 

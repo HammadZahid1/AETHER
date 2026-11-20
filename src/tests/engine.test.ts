@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { formatSimulationTime, formatTimeline, MAX_DELTA, SimulationClock } from '@/engine/clock';
 import { SimulationEngine } from '@/engine/engine';
-import type { SimulationContext, SimulationModule } from '@/types/simulation';
+import type { SimulationContext, SimulationModule, SimulationModuleId } from '@/types/simulation';
 
 describe('SimulationClock', () => {
   it('does not advance while idle', () => {
@@ -70,11 +70,11 @@ describe('SimulationClock', () => {
   });
 });
 
-class CountingModule implements SimulationModule<'test'> {
+class CountingModule implements SimulationModule<string> {
   updates = 0;
   resets = 0;
   disposals = 0;
-  constructor(readonly id = 'wind' as const, readonly name = 'Counter', public config = 'test') {}
+  constructor(readonly id: SimulationModuleId = 'wind', readonly name = 'Counter', public config = 'test') {}
   update(_context: SimulationContext): void { this.updates += 1; }
   reset(): void { this.resets += 1; }
   dispose(): void { this.disposals += 1; }

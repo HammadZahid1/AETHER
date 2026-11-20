@@ -15,7 +15,7 @@ export const OCEAN_TEXTURE_HEIGHT = 48;
 export class OceanSimulation implements SimulationModule<OceanConfig> {
   readonly id = 'ocean' as const;
   readonly name = 'Ocean Explorer';
-  private field = createOceanField(this.config);
+  private field: ReturnType<typeof createOceanField>;
   private temperatureField: ReturnType<typeof createOceanTemperatureField>;
   private particles: ParticleSystem;
   private texture = new Uint8Array(OCEAN_TEXTURE_WIDTH * OCEAN_TEXTURE_HEIGHT * 4);

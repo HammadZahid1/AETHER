@@ -85,7 +85,7 @@ describe('ParticleSystem', () => {
 describe('TrailBuffer', () => {
   it('records and expands trails into segments', () => {
     const system = new ParticleSystem({ capacity: 2 });
-    const index = system.spawn({ ...spawn, lifetime: 10 });
+    system.spawn({ ...spawn, lifetime: 10 });
     const trails = new TrailBuffer(system, 4);
     trails.record();
     system.update(0.1);
