@@ -13,8 +13,8 @@ describe('SimulationClock', () => {
   it('advances time when running', () => {
     const clock = new SimulationClock();
     clock.play();
-    clock.step(0.5);
-    expect(clock.snapshot().elapsed).toBeCloseTo(0.5, 6);
+    clock.step(0.05);
+    expect(clock.snapshot().elapsed).toBeCloseTo(0.05, 6);
     expect(clock.snapshot().frame).toBe(1);
   });
 
