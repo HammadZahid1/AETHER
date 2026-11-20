@@ -1,6 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { ScenarioBrowser } from '@/components/overlays/ScenarioBrowser';
+import { upsertConfiguration } from '@/state/persistence';
+import { useAetherStore } from '@/state/store';
 
 describe('ScenarioBrowser', () => {
   it('loads a built-in scenario and closes', () => {
@@ -35,6 +37,28 @@ describe('ScenarioBrowser', () => {
     expect(createObjectURL).toHaveBeenCalledOnce();
     expect(click).toHaveBeenCalledOnce();
     click.mockRestore();
+  });
+
+  it('renames a saved configuration', () => {
+    localStorage.clear();
+    const saved = {
+      id: 'saved-1',
+      name: 'Old name',
+      createdAt: 1,
+      updatedAt: 1,
+      scenario: {
+        id: 'saved-1', name: 'Old name', description: '', category: 'circulation' as const,
+        module: 'wind' as const, layers: [], camera: { name: 'View', target: { latitude: 0, longitude: 0 }, distance: 2.8 },
+        time: 0, speed: 1,
+      },
+    };
+    const configurations = upsertConfiguration(saved);
+    useAetherStore.setState({ savedConfigurations: configurations });
+    render(<ScenarioBrowser open onClose={vi.fn()} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Rename' }));
+    fireEvent.change(screen.getByLabelText('Rename Old name'), { target: { value: 'New name' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+    expect(useAetherStore.getState().savedConfigurations[0].name).toBe('New name');
   });
 
   it('shows validation errors for invalid imported JSON', () => {
