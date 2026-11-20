@@ -25,6 +25,18 @@ describe('ScenarioBrowser', () => {
     expect(screen.queryByText('Storm Simulation')).toBeNull();
   });
 
+  it('exports the current workspace as JSON', () => {
+    const createObjectURL = vi.fn(() => 'blob:test');
+    Object.defineProperty(URL, 'createObjectURL', { value: createObjectURL, configurable: true });
+    Object.defineProperty(URL, 'revokeObjectURL', { value: vi.fn(), configurable: true });
+    const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => undefined);
+    render(<ScenarioBrowser open onClose={vi.fn()} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Export current' }));
+    expect(createObjectURL).toHaveBeenCalledOnce();
+    expect(click).toHaveBeenCalledOnce();
+    click.mockRestore();
+  });
+
   it('shows validation errors for invalid imported JSON', () => {
     render(<ScenarioBrowser open onClose={vi.fn()} />);
     fireEvent.change(screen.getByLabelText('Scenario JSON'), { target: { value: '{bad json' } });
