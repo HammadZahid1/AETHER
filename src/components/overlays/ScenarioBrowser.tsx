@@ -17,6 +17,8 @@ export function ScenarioBrowser({ open, onClose }: ScenarioBrowserProps) {
   const [importText, setImportText] = useState('');
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState<string>('all');
+  const [renamingId, setRenamingId] = useState<string | null>(null);
+  const [renameText, setRenameText] = useState('');
   const [errors, setErrors] = useState<string[]>([]);
   const loadScenarioById = useAetherStore((state) => state.loadScenarioById);
   const saved = useAetherStore((state) => state.savedConfigurations);
@@ -25,6 +27,7 @@ export function ScenarioBrowser({ open, onClose }: ScenarioBrowserProps) {
   const getCurrentScenario = useAetherStore((state) => state.getCurrentScenario);
   const loadSavedConfiguration = useAetherStore((state) => state.loadSavedConfiguration);
   const removeSavedConfiguration = useAetherStore((state) => state.removeSavedConfiguration);
+  const renameSavedConfiguration = useAetherStore((state) => state.renameSavedConfiguration);
   const importSavedConfiguration = useAetherStore((state) => state.importSavedConfiguration);
   const applyScenario = useAetherStore((state) => state.applyScenario);
   const notify = useAetherStore((state) => state.notify);
@@ -124,10 +127,33 @@ export function ScenarioBrowser({ open, onClose }: ScenarioBrowserProps) {
             <div className="space-y-1.5">
               {saved.map((item) => (
                 <div key={item.id} className="flex items-center gap-2 rounded border border-[var(--aether-border)] px-2.5 py-1.5">
-                  <Icon name="save" size={13} className="text-[var(--aether-accent)]" />
-                  <span className="flex-1 truncate text-[11px]">{item.name}</span>
-                  <Button size="sm" variant="ghost" onClick={() => { loadSavedConfiguration(item.id); onClose(); }}>Load</Button>
-                  <Button size="sm" variant="ghost" icon="trash" onClick={() => removeSavedConfiguration(item.id)} aria-label={`Delete ${item.name}`} />
+                  <Icon name="save" size={13} className="shrink-0 text-[var(--aether-accent)]" />
+                  {renamingId === item.id ? (
+                    <>
+                      <input
+                        autoFocus
+                        value={renameText}
+                        onChange={(event) => setRenameText(event.target.value)}
+                        aria-label={`Rename ${item.name}`}
+                        className="aether-mono min-w-0 flex-1 rounded border border-[var(--aether-border)] bg-[var(--aether-bg-raised)] px-1.5 py-1 text-[10px] outline-none"
+                      />
+                      <Button size="sm" variant="ghost" onClick={() => {
+                        if (renameText.trim()) renameSavedConfiguration(item.id, renameText.trim());
+                        setRenamingId(null);
+                      }}>Save</Button>
+                      <Button size="sm" variant="ghost" onClick={() => setRenamingId(null)}>Cancel</Button>
+                    </>
+                  ) : (
+                    <>
+                      <span className="flex-1 truncate text-[11px]">{item.name}</span>
+                      <Button size="sm" variant="ghost" onClick={() => {
+                        setRenamingId(item.id);
+                        setRenameText(item.name);
+                      }}>Rename</Button>
+                      <Button size="sm" variant="ghost" onClick={() => { loadSavedConfiguration(item.id); onClose(); }}>Load</Button>
+                      <Button size="sm" variant="ghost" icon="trash" onClick={() => removeSavedConfiguration(item.id)} aria-label={`Delete ${item.name}`} />
+                    </>
+                  )}
                 </div>
               ))}
             </div>
