@@ -128,7 +128,7 @@ export const useAetherStore = create<AetherState>((set, get) => ({
   setSpeed: (speed) => set({ speed: Math.min(Math.max(speed, 0), 16) }),
   setDirection: (direction) => set({ direction }),
   setClock: (elapsed, timeline, frame) => set({ elapsed, timeline, frame }),
-  seek: (timeline) => set({ timeline: Math.min(Math.max(timeline, 0), 1) }),
+  seek: (timeline) => set({ timeline: Math.min(Math.max(timeline, 0), 0.999999) }),
   setSelectedCoordinate: (selectedCoordinate) => set({ selectedCoordinate }),
 
   setCamera: (patch) => set((state) => ({ camera: { ...state.camera, ...patch } })),
