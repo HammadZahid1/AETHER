@@ -61,6 +61,7 @@ export function TopBar({ onToggleFullscreen, isFullscreen }: TopBarProps) {
             <div className="text-[13px] font-bold tracking-[0.22em] text-[var(--aether-text)]">AETHER</div>
             <div className="mt-1 hidden text-[8px] tracking-[0.16em] text-[var(--aether-text-dim)] sm:block">EARTH &amp; ATMOSPHERE SIMULATION</div>
           </div>
+          <Badge tone="warning" className="hidden md:inline-flex">SIMULATED</Badge>
         </div>
         <div className="hidden h-5 w-px bg-[var(--aether-border)] md:block" />
         <div className="hidden min-w-0 items-center gap-2 md:flex">

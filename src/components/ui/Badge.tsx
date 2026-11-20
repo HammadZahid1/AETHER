@@ -10,9 +10,9 @@ const TONES: Record<BadgeTone, string> = {
   danger: 'border-[rgba(232,108,108,0.3)] text-[var(--aether-danger)] bg-[rgba(232,108,108,0.06)]',
 };
 
-export function Badge({ children, tone = 'neutral', dot = false }: { children: ReactNode; tone?: BadgeTone; dot?: boolean }) {
+export function Badge({ children, tone = 'neutral', dot = false, className = '' }: { children: ReactNode; tone?: BadgeTone; dot?: boolean; className?: string }) {
   return (
-    <span className={`inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.1em] ${TONES[tone]}`}>
+    <span className={`inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.1em] ${TONES[tone]} ${className}`}>
       {dot ? <span className="h-1.5 w-1.5 rounded-full bg-current" /> : null}
       {children}
     </span>
