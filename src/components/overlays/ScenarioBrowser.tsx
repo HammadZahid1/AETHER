@@ -15,6 +15,7 @@ interface ScenarioBrowserProps {
 /** Browse built-in scenarios and manage locally saved configurations. */
 export function ScenarioBrowser({ open, onClose }: ScenarioBrowserProps) {
   const [importText, setImportText] = useState('');
+  const [query, setQuery] = useState('');
   const [errors, setErrors] = useState<string[]>([]);
   const loadScenarioById = useAetherStore((state) => state.loadScenarioById);
   const saved = useAetherStore((state) => state.savedConfigurations);
@@ -25,6 +26,11 @@ export function ScenarioBrowser({ open, onClose }: ScenarioBrowserProps) {
   const importSavedConfiguration = useAetherStore((state) => state.importSavedConfiguration);
   const applyScenario = useAetherStore((state) => state.applyScenario);
   const notify = useAetherStore((state) => state.notify);
+
+  const needle = query.trim().toLowerCase();
+  const visibleScenarios = needle
+    ? SCENARIOS.filter((scenario) => `${scenario.name} ${scenario.description} ${scenario.category}`.toLowerCase().includes(needle))
+    : SCENARIOS;
 
   const download = (id: string) => {
     const scenario = SCENARIOS.find((item) => item.id === id);
@@ -55,8 +61,19 @@ export function ScenarioBrowser({ open, onClose }: ScenarioBrowserProps) {
   return (
     <Dialog open={open} onClose={onClose} title="Scenarios" subtitle="Deterministic starting conditions and saved configurations" width="max-w-3xl">
       <div className="space-y-5">
+        <section>
+          <input
+            type="search"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            aria-label="Search scenarios"
+            placeholder="Search scenarios by name, description or category…"
+            className="aether-mono mb-2 w-full rounded border border-[var(--aether-border)] bg-[var(--aether-bg-raised)] px-2 py-1.5 text-[10px] outline-none"
+          />
+        </section>
+
         <section className="grid gap-2 sm:grid-cols-2">
-          {SCENARIOS.map((scenario) => (
+          {visibleScenarios.map((scenario) => (
             <div key={scenario.id} className="aether-panel p-3">
               <div className="flex items-start justify-between gap-2">
                 <div>
