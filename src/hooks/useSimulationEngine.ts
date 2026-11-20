@@ -56,12 +56,20 @@ export function useSimulationEngine(): SimulationControls {
     let frame = 0;
     let previous = performance.now();
     let handle = 0;
+    let lastErrorCount = 0;
 
     const tick = (now: number) => {
       const delta = Math.min(0.1, Math.max(0, (now - previous) / 1000));
       previous = now;
       const context = simulationEngine.update(delta);
       frame += 1;
+      const errors = simulationEngine.getErrors();
+      if (errors.length < lastErrorCount) lastErrorCount = 0;
+      if (errors.length > lastErrorCount) {
+        const latest = errors[errors.length - 1];
+        useAetherStore.getState().notify(`${latest.module}: ${latest.message}`, 'warning');
+      }
+      lastErrorCount = errors.length;
       if (frame % 6 === 0) {
         useAetherStore.getState().setClock(context.time, context.timeline, context.frame);
       }
