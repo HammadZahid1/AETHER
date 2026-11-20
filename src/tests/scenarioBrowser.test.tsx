@@ -18,6 +18,13 @@ describe('ScenarioBrowser', () => {
     expect(screen.queryByText('Global Wind Circulation')).toBeNull();
   });
 
+  it('filters scenarios by category', () => {
+    render(<ScenarioBrowser open onClose={vi.fn()} />);
+    fireEvent.change(screen.getByLabelText('Filter scenarios by category'), { target: { value: 'marine' } });
+    expect(screen.getByText('Ocean Currents')).toBeTruthy();
+    expect(screen.queryByText('Storm Simulation')).toBeNull();
+  });
+
   it('shows validation errors for invalid imported JSON', () => {
     render(<ScenarioBrowser open onClose={vi.fn()} />);
     fireEvent.change(screen.getByLabelText('Scenario JSON'), { target: { value: '{bad json' } });
