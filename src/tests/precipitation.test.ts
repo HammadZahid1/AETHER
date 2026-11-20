@@ -38,7 +38,7 @@ describe('PrecipitationSimulation', () => {
     expect(simulation.particleSystem.capacity).toBeGreaterThan(0);
     const b = simulation.particleSystem.buffers;
     let above = 0;
-    for (let i = 0; i < b.capacity.length; i += 1) {
+    for (let i = 0; i < b.alive.length; i += 1) {
       if (!b.alive[i]) continue;
       const p = i * 3;
       expect(Math.hypot(b.position[p], b.position[p + 1], b.position[p + 2])).toBeGreaterThan(1);

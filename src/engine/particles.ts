@@ -118,6 +118,14 @@ export class ParticleSystem {
     }
   }
 
+  /** Set the alive flag directly while keeping the live count consistent. */
+  setAlive(index: number, alive: boolean): void {
+    const wasAlive = this.buffers.alive[index] === 1;
+    if (alive === wasAlive) return;
+    this.buffers.alive[index] = alive ? 1 : 0;
+    this.liveCount += alive ? 1 : -1;
+  }
+
   clear(): void {
     this.buffers.alive.fill(0);
     this.liveCount = 0;

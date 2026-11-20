@@ -91,7 +91,7 @@ export class StormSimulation implements SimulationModule<StormConfig> {
     b.velocity[p + 2] = 0;
     b.age[index] = random() * 5;
     b.lifetime[index] = 8 + random() * 10;
-    b.alive[index] = 1;
+    this.particles.setAlive(index, true);
   }
 
   reseed(): void {

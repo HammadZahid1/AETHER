@@ -53,7 +53,7 @@ export class PrecipitationSimulation implements SimulationModule<PrecipitationCo
     }
     const intensity = this.field.sample(latitude, longitude, 0);
     if (random() > intensity * 1.4 + 0.05) {
-      this.particles.buffers.alive[index] = 0;
+      this.particles.setAlive(index, false);
       return;
     }
     const point = geoToCartesian(latitude, longitude, RAIN_TOP_ALTITUDE - random() * 0.03);
@@ -72,7 +72,7 @@ export class PrecipitationSimulation implements SimulationModule<PrecipitationCo
     b.opacity[index] = 0.35 + intensity * 0.55;
     b.age[index] = ageOffset;
     b.lifetime[index] = 6;
-    b.alive[index] = 1;
+    this.particles.setAlive(index, true);
   }
 
   update(context: SimulationContext): void {

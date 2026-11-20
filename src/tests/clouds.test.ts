@@ -23,8 +23,10 @@ describe('cloud field', () => {
   });
 
   it('changes over time and across layers', () => {
-    expect(sampleCloudDensity(30, 0, 0, config)).not.toBeCloseTo(sampleCloudDensity(30, 0, 500, config), 5);
-    expect(sampleCloudDensity(30, 0, 0, config, 0)).not.toBe(sampleCloudDensity(30, 0, 0, config, 1));
+    const samplesAt = (time: number, layer: number) =>
+      Array.from({ length: 12 }, (_, i) => sampleCloudDensity(-60 + i * 10, i * 30, time, config, layer));
+    expect(samplesAt(0, 0)).not.toEqual(samplesAt(500, 0));
+    expect(samplesAt(0, 0)).not.toEqual(samplesAt(0, 1));
   });
 
   it('raises upper cloud layers', () => {

@@ -103,7 +103,7 @@ export class CloudSimulation implements SimulationModule<CloudConfig> {
     b.age[index] = 0;
     b.lifetime[index] = 14 + random() * 20;
     b.opacity[index] = this.config.opacity * (0.5 + random() * 0.5);
-    b.alive[index] = 1;
+    this.particles.setAlive(index, true);
   }
 
   densityAt(latitude: number, longitude: number, time = 0): number {
