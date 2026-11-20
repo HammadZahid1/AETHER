@@ -76,10 +76,10 @@ export class StormSimulation implements SimulationModule<StormConfig> {
     const latitude = Math.asin(
       Math.sin(latRad) * Math.cos(angular) + Math.cos(latRad) * Math.sin(angular) * Math.cos(bearingRad),
     ) / DEG_TO_RAD;
-    const longitude = lonRad + Math.atan2(
+    const longitude = (lonRad + Math.atan2(
       Math.sin(bearingRad) * Math.sin(angular) * Math.cos(latRad),
       Math.cos(angular) - Math.sin(latRad) * Math.sin(latitude * DEG_TO_RAD),
-    ) / DEG_TO_RAD;
+    )) / DEG_TO_RAD;
     const point = geoToCartesian(latitude, longitude, STORM_LAYER_RADIUS);
     const b = this.particles.buffers;
     const p = index * 3;
