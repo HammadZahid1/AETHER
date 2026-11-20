@@ -118,6 +118,22 @@ export function saveSavedView(view: SavedView): SavedView[] {
   return all;
 }
 
+/** Remove a saved view from local storage. */
+export function deleteSavedView(id: string): SavedView[] {
+  const all = loadSavedViews().filter((item) => item.id !== id);
+  write(VIEWS_KEY, JSON.stringify(all));
+  return all;
+}
+
+/** Rename a saved view without changing its camera target. */
+export function renameSavedView(id: string, name: string): SavedView[] {
+  const all = loadSavedViews().map((item) =>
+    item.id === id ? { ...item, name, createdAt: Date.now() } : item,
+  );
+  write(VIEWS_KEY, JSON.stringify(all));
+  return all;
+}
+
 export function clearAllPersistedData(): void {
   remove(SETTINGS_KEY);
   remove(CONFIGURATIONS_KEY);
