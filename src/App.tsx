@@ -56,10 +56,16 @@ export function App() {
 
   return (
     <div className="flex h-full w-full flex-col overflow-hidden bg-[var(--aether-bg)] text-[var(--aether-text)]">
+      <a
+        href="#aether-viewport"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-[100] focus:rounded focus:bg-[var(--aether-accent)] focus:px-3 focus:py-1 focus:text-[11px] focus:text-[#04121a]"
+      >
+        Skip to globe viewport
+      </a>
       <TopBar onToggleFullscreen={toggleFullscreen} isFullscreen={isFullscreen} />
       <div className="flex min-h-0 flex-1">
         <LeftNav mobileOpen={mobileNavOpen} onMobileClose={() => setMobileNavOpen(false)} />
-        <main className="relative min-w-0 flex-1 overflow-hidden bg-[var(--aether-bg)]">
+        <main id="aether-viewport" className="relative min-w-0 flex-1 overflow-hidden bg-[var(--aether-bg)]">
           <SceneErrorBoundary><SceneCanvas /></SceneErrorBoundary>
           <MobileControls onOpenNavigation={() => setMobileNavOpen(true)} />
           <ViewportControls onOpenScenarios={() => setScenarioOpen(true)} onResetCamera={resetCamera} />
