@@ -6,6 +6,11 @@ import { useAetherStore } from '@/state/store';
 describe('Notifications', () => {
   beforeEach(() => useAetherStore.setState({ notifications: [] }));
 
+  it('exposes a persistent polite live region', () => {
+    render(<Notifications />);
+    expect(screen.getByRole('status')).toHaveAttribute('aria-live', 'polite');
+  });
+
   it('shows and dismisses store notifications', () => {
     useAetherStore.getState().notify('Scenario loaded', 'success');
     render(<Notifications />);
