@@ -162,6 +162,22 @@ describe('SimulationEngine', () => {
     expect(engine.seek(2).timeline).toBeLessThan(1);
   });
 
+  it('reports registered modules and error diagnostics', () => {
+    engine.register(new CountingModule('wind'));
+    engine.register(new CountingModule('ocean'));
+    engine.activate('wind');
+    engine.start();
+    expect(engine.diagnostics()).toMatchObject({ registeredModules: 2, activeModules: 1, running: true, errors: 0 });
+
+    const failing = new CountingModule('ocean');
+    failing.update = () => { throw new Error('diagnostic failure'); };
+    engine.register(failing);
+    engine.activate('ocean');
+    engine.update(0.05);
+    expect(engine.diagnostics().errors).toBe(1);
+    expect(engine.diagnostics().latestError?.message).toBe('diagnostic failure');
+  });
+
   it('restores elapsed time and direction through the engine facade', () => {
     engine.setElapsed(125);
     engine.setDirection(-1);
