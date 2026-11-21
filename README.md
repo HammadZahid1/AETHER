@@ -60,3 +60,35 @@ The eight output-producing simulations are registered once by `registerSimulatio
 The renderer never fetches data. Procedural noise, analytic latitude bands, Gaussian pressure centers, gyres and deterministic rasterization provide values for textures, particles, contours and inspection records. Repeating the same settings and timeline produces the same values.
 
 Zustand stores the active module, configurations, layer state, camera, playback state, notifications and locally saved artifacts. React components subscribe only to the slices they need; the simulation engine remains independent of React.
+
+## Modules and controls
+
+| Module | Purpose |
+| --- | --- |
+| Earth Explorer | Rotate the globe, inspect coordinates and select a surface point. |
+| Atmosphere | Step through exaggerated shells from troposphere to exosphere. |
+| Wind Lab | Animate a simplified global wind field as particles, streamlines or vectors. |
+| Temperature Lab | Inspect a simulated thermal field with seasonal and day/night terms. |
+| Pressure Systems | Place simulated highs and lows and display contours and gradients. |
+| Cloud Laboratory | Shape procedural cloud layers with density, coverage and altitude controls. |
+| Precipitation Lab | Visualize regional or global rainfall with falling particle drops. |
+| Storm Lab | Build an illustrative rotating storm with spiral flow, rain and a track. |
+| Ocean Explorer | Explore simplified gyres, equatorial currents and sea temperature. |
+| Climate Lab | Compare bundled illustrative datasets across seasons. |
+
+Drag the globe to rotate it, scroll or pinch to zoom, and click the surface to inspect the selected coordinate. The top bar provides fullscreen, settings, help, provenance and saved-view actions. The left navigation selects a module; the right panel exposes that module's parameters. The bottom timeline controls play, pause, stop, step, speed and direction. The layers panel controls visibility, opacity and intensity for all eleven overlay layers.
+
+### Keyboard shortcuts
+
+| Key | Action |
+| --- | --- |
+| `Ctrl/⌘ + K` | Open the command palette |
+| `Space` | Play or pause |
+| `←` / `→` | Step the timeline backward or forward |
+| `R` | Reset camera to the global view |
+| `L` | Toggle the layers panel |
+| `S` | Open the scenario browser |
+| `?` | Toggle help |
+| `Esc` | Close an open dialog or overlay |
+
+Shortcuts are ignored while typing in an input, textarea, select or content-editable element. The command palette also exposes playback, camera, layer, diagnostics, scenario, saved-view and data-clearing commands.
