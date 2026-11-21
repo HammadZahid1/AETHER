@@ -118,3 +118,21 @@ Atmospheric shells are visually exaggerated so they can be seen at planetary sca
 ### Accessibility
 
 The interface includes a skip link to the globe viewport, labelled controls, focus-managed dialogs, persistent ARIA live notifications, keyboard-operable overlays, reduced-motion settings and responsive controls for smaller screens. The default palette aims for sufficient contrast in both dark and light themes.
+
+## Scenarios, presets and persistence
+
+A **scenario** is a complete, reproducible setup: active module, layer states, camera target, playback speed, timeline position and per-simulation configurations. Ten examples ship with AETHER, covering circulation, thermal, atmospheric, marine, climate and extreme-weather themes. Every bundled scenario uses simulated values only.
+
+The scenario browser can search by name, description or category, filter by category, load a scenario, download any scenario as JSON and export the current workspace. Saved configurations can be loaded, renamed, duplicated, downloaded and removed. Pasted JSON is validated and sanitized before import; invalid values are rejected or normalized instead of being applied directly.
+
+A **layer preset** is a simpler, named visibility arrangement. Presets such as `Earth Overview`, `Storm Visualization` and `Clean Globe` are available from the layers panel and command palette. They change visualization layers without replacing simulation parameters.
+
+Persistence uses `localStorage` only:
+
+| Key | Contents |
+| --- | --- |
+| `aether.settings.v1` | Theme, defaults, tooltip/grid preferences and rendering quality |
+| `aether.configurations.v1` | User-saved configurations |
+| `aether.views.v1` | Named camera views |
+
+Storage access is defensive: corrupt JSON or unavailable storage falls back to defaults without breaking the app. Settings and saved views can be renamed. The command palette includes a clear-data action that removes all three keys after confirmation. Nothing is written to a server.
