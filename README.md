@@ -33,3 +33,30 @@ npm run dev
 ```
 
 Vite prints the local development URL, usually `http://localhost:5173`. Open that URL in a browser. No environment variables, API keys or services are required.
+
+## Architecture
+
+AETHER is a static Vite + React + TypeScript application. Tailwind CSS provides the design system, React Three Fiber and Three.js render the globe, Zustand holds UI state, and Vitest with React Testing Library covers domain logic and interfaces.
+
+```text
+src/
+  App.tsx              application shell and overlay composition
+  components/          layout, panels, overlays and reusable UI primitives
+  data/                module metadata, defaults, presets, scenarios and reference tables
+  engine/              clock, engine, coordinates, fields, noise, layers and validation
+  hooks/               engine driving, theme and keyboard shortcuts
+  renderer/            globe, atmosphere, overlays, layers and WebGL fallback
+  simulations/         wind, temperature, pressure, clouds, rain, storm, ocean, climate
+  state/               Zustand store and localStorage persistence
+  tests/               unit and component tests
+  types/               shared domain types
+  utils/               formatting helpers
+```
+
+The `engine/` layer owns simulation time. `SimulationClock` produces a single frame context, and `SimulationEngine` passes that context to each active module in registration order. Module failures are captured and surfaced through diagnostics rather than crashing the application.
+
+The eight output-producing simulations are registered once by `registerSimulationModules()` and exposed to renderers through `getSimulationModules()`. Panel edits are pushed into the same instances with `syncSimulationConfigurations()`, so changing a slider does not replace the clock or discard particles.
+
+The renderer never fetches data. Procedural noise, analytic latitude bands, Gaussian pressure centers, gyres and deterministic rasterization provide values for textures, particles, contours and inspection records. Repeating the same settings and timeline produces the same values.
+
+Zustand stores the active module, configurations, layer state, camera, playback state, notifications and locally saved artifacts. React components subscribe only to the slices they need; the simulation engine remains independent of React.
