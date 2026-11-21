@@ -37,7 +37,7 @@ export const CLIMATE_DATASETS: Record<ClimateDatasetId, ClimateDataset> = {
     max: 40,
     sample: (latitude, longitude, season) => {
       const lat = Math.abs(latitude) / 90;
-      const seasonal = Math.cos(seasonPhase(season)) * (latitude >= 0 ? 1 : -1) * 12 * lat;
+      const seasonal = -Math.cos(seasonPhase(season)) * (latitude >= 0 ? 1 : -1) * 12 * lat;
       const base = 30 - lat * 70 + seasonal;
       return clamp(base + spatialNoise(latitude, longitude, 41) * 7, -45, 40);
     },
@@ -54,7 +54,7 @@ export const CLIMATE_DATASETS: Record<ClimateDatasetId, ClimateDataset> = {
       const tropical = Math.exp(-((absLat / 12) ** 2)) * 220;
       const midLatitude = Math.exp(-((((absLat - 48) / 18) ** 2))) * 110;
       const subtropicalDry = Math.exp(-((((absLat - 27) / 9) ** 2))) * 70;
-      const monsoon = Math.cos(seasonPhase(season) + longitude * 0.01) * 35;
+      const monsoon = -Math.cos(seasonPhase(season) + longitude * 0.01) * 35;
       return clamp(tropical + midLatitude - subtropicalDry + monsoon + spatialNoise(latitude, longitude, 73) * 30, 0, 320);
     },
   },
@@ -68,7 +68,7 @@ export const CLIMATE_DATASETS: Record<ClimateDatasetId, ClimateDataset> = {
     sample: (latitude, longitude, season) => {
       const absLat = Math.abs(latitude);
       const index = 5 - (absLat / 90) * 5;
-      return clamp(index + spatialNoise(latitude, longitude, 19) * 0.55 + Math.cos(seasonPhase(season)) * 0.15, 0, 5);
+      return clamp(index + spatialNoise(latitude, longitude, 19) * 0.55 - Math.cos(seasonPhase(season)) * 0.15, 0, 5);
     },
   },
   ocean: {
@@ -79,7 +79,7 @@ export const CLIMATE_DATASETS: Record<ClimateDatasetId, ClimateDataset> = {
     min: -2,
     max: 32,
     sample: (latitude, longitude, season) => {
-      const seasonal = Math.cos(seasonPhase(season)) * (latitude >= 0 ? 1 : -1) * 3;
+      const seasonal = -Math.cos(seasonPhase(season)) * (latitude >= 0 ? 1 : -1) * 3;
       return clamp(29 - Math.abs(latitude) * 0.38 + seasonal + spatialNoise(latitude, longitude, 101) * 2.5, -2, 32);
     },
   },
