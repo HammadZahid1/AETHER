@@ -106,7 +106,7 @@ describe('application store', () => {
 
   it('saves, renames and removes configurations', () => {
     useAetherStore.getState().saveCurrentConfiguration('Test config');
-    let state = useAetherStore.getState();
+    const state = useAetherStore.getState();
     expect(state.savedConfigurations.length).toBeGreaterThan(0);
     const id = state.savedConfigurations[0].id;
     state.renameSavedConfiguration(id, 'Renamed config');
