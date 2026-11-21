@@ -154,3 +154,28 @@ Tests use Vitest with jsdom and React Testing Library. The configuration in `vit
 When adding a simulation, keep field generation in `simulations/` or `engine/`, expose it through the shared module registry, and add a deterministic domain test before wiring renderer controls. When adding UI, prefer the existing `Panel`, `Button`, `Dialog` and `Icon` primitives and add a component test that checks accessible names and state changes.
 
 The production build succeeds and emits only Vite's advisory that the generated JavaScript chunk is larger than 500 kB, which is expected because Three.js is bundled into the client. No server-side rendering or code splitting service is required.
+
+## Deployment
+
+Run `npm run build` and publish the resulting `dist/` directory as static files. AETHER needs no server runtime, database, environment variables, secrets or API gateway. Any static host, object storage bucket or CDN can serve it.
+
+Use `npm run preview` to check the exact production bundle locally before publishing. If the application is hosted below a subpath rather than at a domain root, set Vite's `base` option in `vite.config.ts` before building. The application does not use client-side routes, so no special SPA rewrite rules are required, but serving `index.html` for unknown paths is harmless.
+
+WebGL2 is recommended for the globe. When a browser cannot create a WebGL context, the interface shows the bundled fallback and keeps controls, provenance information and saved data available.
+
+## Verification snapshot
+
+The following checks were run against the completed application:
+
+| Check | Result |
+| --- | --- |
+| `npx tsc -b --noEmit` | Passed with no TypeScript errors |
+| `npx vitest run` | 57 test files passed; 289 tests passed |
+| `npm run lint` | Passed with no ESLint findings |
+| `npm run build` | Passed; 723 modules transformed |
+| Production output | `index.html`, CSS 24.33 kB, JavaScript 1,144.41 kB (317.84 kB gzip) |
+| `git ls-remote origin HEAD` | Remote HEAD matched the local commit at verification time |
+
+The build emits Vite's non-fatal chunk-size advisory because Three.js and React Three Fiber are bundled into one client chunk. `npm audit` reports three advisories in the Vitest test toolchain (one moderate, two critical); they are dev-dependency advisories and do not change the static production output. Upgrading Vitest is a breaking change and should be evaluated separately.
+
+AETHER remains an illustrative teaching tool. The safety statement at the top of this README applies to every view, scenario, exported configuration and generated value.
