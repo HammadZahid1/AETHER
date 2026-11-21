@@ -136,3 +136,21 @@ Persistence uses `localStorage` only:
 | `aether.views.v1` | Named camera views |
 
 Storage access is defensive: corrupt JSON or unavailable storage falls back to defaults without breaking the app. Settings and saved views can be renamed. The command palette includes a clear-data action that removes all three keys after confirmation. Nothing is written to a server.
+
+## Development and testing
+
+| Script | Purpose |
+| --- | --- |
+| `npm run dev` | Start the Vite development server with hot reload |
+| `npm run build` | Typecheck the project and create a production build in `dist/` |
+| `npm run preview` | Serve the production build locally |
+| `npm test` | Run the complete Vitest suite once |
+| `npm run test:watch` | Run Vitest in watch mode |
+| `npm run typecheck` | Run TypeScript project checking without emitting code |
+| `npm run lint` | Run ESLint across the repository |
+
+Tests use Vitest with jsdom and React Testing Library. The configuration in `vite.config.ts` registers the `@/` alias to `src/`, enables test globals and loads `src/tests/setup.ts`. Domain tests exercise coordinates, noise, fields, contours, particles, trails, colormaps, clock behavior, configurations, scenario validation and all eight simulations. Component tests cover navigation, panels, dialog focus handling, command palette, keyboard shortcuts, notifications, timeline, diagnostics and the WebGL fallback.
+
+When adding a simulation, keep field generation in `simulations/` or `engine/`, expose it through the shared module registry, and add a deterministic domain test before wiring renderer controls. When adding UI, prefer the existing `Panel`, `Button`, `Dialog` and `Icon` primitives and add a component test that checks accessible names and state changes.
+
+The production build succeeds and emits only Vite's advisory that the generated JavaScript chunk is larger than 500 kB, which is expected because Three.js is bundled into the client. No server-side rendering or code splitting service is required.
