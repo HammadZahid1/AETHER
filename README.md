@@ -92,3 +92,29 @@ Drag the globe to rotate it, scroll or pinch to zoom, and click the surface to i
 | `Esc` | Close an open dialog or overlay |
 
 Shortcuts are ignored while typing in an input, textarea, select or content-editable element. The command palette also exposes playback, camera, layer, diagnostics, scenario, saved-view and data-clearing commands.
+
+## Data provenance and limitations
+
+### What the data are
+
+Every value in AETHER is produced locally by deterministic code. Fields come from fractal noise, analytic latitude bands, Gaussian pressure centers, simplified gyres and small coupled models. Textures, contours, particle paths and inspection values are derived from those same functions. Given identical settings and timeline state, the application reproduces identical output.
+
+### What the data are not
+
+AETHER does **not** ship observational datasets, reanalysis products, forecasts or calibrated instrument readings. It makes no network requests for data and contacts no external services. Coastlines, atmospheric profiles and climate patterns are procedural approximations created for exploration and teaching.
+
+> AETHER is **not suitable for forecasting, navigation, aviation, marine operations, emergency planning or any operational decision**. It is not a numerical weather prediction system.
+
+This limitation is repeated in the application itself: the top bar marks the workspace as simulated, the help dialog states it, and the Data Provenance dialog gives a dedicated suitability statement.
+
+### Units and labels
+
+Temperatures are displayed in °C, pressure in hPa, wind in m/s and distances in kilometres. These units describe the scale of the illustrative values; they are not calibrated to any observing network. Labels such as “simulated”, “illustrative” and “m/s (simulated)” are intentional and should not be removed.
+
+### Rendering caveats
+
+Atmospheric shells are visually exaggerated so they can be seen at planetary scale. Particle counts, drop sizes, cloud layers and streamline density are visualization choices, not physical measurements. If WebGL is unavailable, AETHER shows a readable fallback instead of the globe; simulation controls and provenance information remain available.
+
+### Accessibility
+
+The interface includes a skip link to the globe viewport, labelled controls, focus-managed dialogs, persistent ARIA live notifications, keyboard-operable overlays, reduced-motion settings and responsive controls for smaller screens. The default palette aims for sufficient contrast in both dark and light themes.
